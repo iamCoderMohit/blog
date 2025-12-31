@@ -87,9 +87,15 @@ authRouter.post("/signin", async (req, res) => {
 
 authRouter.post("/logout", async (req, res) => {
     try {
-         
+        res.cookie("token", "")
+
+        res.json({
+            msg: "successfully logged out!!"
+        })
     } catch (error) {
-        
+        res.status(500).json({
+            msg: "something went wrong!!"
+        })
     }
 })
 

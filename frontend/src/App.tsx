@@ -16,12 +16,22 @@ function App() {
       console.log("some error occurred")
     }
   }
+
+  async function handleLogout() {
+    try {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {}, {withCredentials: true})
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <>
       <input type="text" onChange={(e) => setUsername(e.target.value)} />
       <input type="text" onChange={(e) => setEmail(e.target.value)} />
       <input type="text" onChange={(e) => setPassword(e.target.value)} />
       <button onClick={() => handleSubmit(username, email, password)}>Enter</button>
+
+      <button onClick={handleLogout}>Logout</button>
     </>
   )
 }
