@@ -1,10 +1,11 @@
 import express from "express"
 import prisma from "../config/prisma.js"
+import { verifyUser } from "../middlewares/verifyUser.js"
 
 const blogRouter = express.Router()
 
 //create a blog
-blogRouter.post("/new", async (req, res) => {
+blogRouter.post("/new", verifyUser, async (req, res) => {
     try {
         const {title, content} = req.body
 
@@ -14,15 +15,30 @@ blogRouter.post("/new", async (req, res) => {
             })
         }
 
-        // const blog = await prisma.blog.create({
-        //     data: {
-        //         title,
-        //         content,
-        //         // authorId //fetch from jwt stored in cookie
-        //     }
-        // })
-    } catch (error) {
+        console.log(Object.keys(prisma))
+
+        const blog = await prisma.blog.create({
+            data: {
+                title,
+                content,
+                authorId: req.user.id
+            }
+        })
         
+        console.log("reached")
+
+        res.json({
+            blog: {
+                title: blog.title,
+                content: blog.content,
+                createdAt: blog.createdAt
+            }
+        })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            msg: "something went wrong!!"
+        })
     }
 })
 

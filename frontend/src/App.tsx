@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 import axios from 'axios'
+import Signin from './components/Signin'
+import NewBlog from './components/NewBlog'
 
 function App() {
   const [username, setUsername] = useState("")
@@ -32,6 +34,10 @@ function App() {
       <button onClick={() => handleSubmit(username, email, password)}>Enter</button>
 
       <button onClick={handleLogout}>Logout</button>
+
+      <Signin />
+
+      <NewBlog />
     </>
   )
 }

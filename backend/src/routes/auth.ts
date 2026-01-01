@@ -32,7 +32,7 @@ authRouter.post('/signup', async (req, res) => {
         })
 
         //create jwt token and store in cookies then fetch it in the blog route
-        const jwttoken = jwt.sign({email, username}, process.env.JWT_SECRET!)
+        const jwttoken = jwt.sign({username: user.username, email: user.email, id: user.id}, process.env.JWT_SECRET!)
 
         res.cookie("token", jwttoken, {
             httpOnly: true,
@@ -75,9 +75,17 @@ authRouter.post("/signin", async (req, res) => {
             })
         }
 
+        const jwttoken = jwt.sign({username: userExist.username, email: userExist.email, id: userExist.id}, process.env.JWT_SECRET!)
+
+        res.cookie("token", jwttoken, {
+            httpOnly: true,
+            sameSite: "strict",
+        })
+
         return res.json({
             msg: "signed in!!"
         })
+        
     } catch (error) {
         return res.status(500).json({
             msg: "something went wrong!!"
@@ -87,7 +95,7 @@ authRouter.post("/signin", async (req, res) => {
 
 authRouter.post("/logout", async (req, res) => {
     try {
-        res.cookie("token", "")
+        res.clearCookie("token")
 
         res.json({
             msg: "successfully logged out!!"
