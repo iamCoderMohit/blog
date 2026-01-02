@@ -3,6 +3,7 @@ import './App.css'
 import axios from 'axios'
 import Signin from './components/Signin'
 import NewBlog from './components/NewBlog'
+import ShowBlogs from './components/ShowBlogs'
 
 function App() {
   const [username, setUsername] = useState("")
@@ -38,6 +39,10 @@ function App() {
       <Signin />
 
       <NewBlog />
+
+      <ShowBlogs />
+
+      //routing
     </>
   )
 }
