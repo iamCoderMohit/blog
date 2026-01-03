@@ -29,6 +29,7 @@ authRouter.post('/signup', async (req, res) => {
         res.cookie("token", jwttoken, {
             httpOnly: true,
             sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
         });
         return res.json({
             user
@@ -64,6 +65,7 @@ authRouter.post("/signin", async (req, res) => {
         res.cookie("token", jwttoken, {
             httpOnly: true,
             sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
         });
         return res.json({
             msg: "signed in!!"

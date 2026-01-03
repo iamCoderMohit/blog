@@ -60,8 +60,9 @@ function ShowBlogs() {
   return (
     <div>
         <button onClick={fetchMyBlogs}>Fetch Blogs</button>
-        {!loading && blogs.map((i: any) => (
+        {!loading && blogs.map((i: any, ind: any) => (
             <div>
+                <p>{ind}</p>
                 <p>{i.title}</p>
                 <p>{i.content}</p>
                 <button onClick={() => deleteBlog(i.id)}>delete</button>
