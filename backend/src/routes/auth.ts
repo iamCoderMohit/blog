@@ -109,4 +109,31 @@ authRouter.post("/logout", async (req, res) => {
     }
 })
 
+authRouter.post("/check", async (req, res) => {
+    try {
+        const {username} = req.body
+
+        const usernameExist = await prisma.user.findFirst({
+            where: {
+                username
+            }
+        })
+
+        if(usernameExist){
+            return res.status(404).json({
+                msg: "username already taken!!"
+            })
+        }
+
+        res.json({
+            msg: "username available!!"
+        })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            msg: "something went wrong!!"
+        })
+    }
+})
+
 export default authRouter

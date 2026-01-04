@@ -180,7 +180,7 @@ blogRouter.get("/feed", async (req, res) => {
             skip: cursorVal ? 1 : 0,
             //@ts-ignore
             cursor: cursorVal ? {
-                createdAt: cursorVal
+                id: cursorVal
             } : undefined,
             where: {
                 isPublic: true

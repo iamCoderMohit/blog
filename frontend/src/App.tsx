@@ -1,16 +1,19 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
+import {Route, Routes } from "react-router-dom";
 import Feed from "./pages/Feed";
-import Navbar from "./components/Navbar";
+import Landing from "./pages/Landing";
+import BgTheme from "./layouts/BgTheme";
+import Signin from "./pages/Signin";
+import Signup from "./pages/Signup";
 
 export default function App() {
   return (
-    <BrowserRouter>
-    <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/feed" element={<Feed />} />
+        <Route element={<BgTheme />}>
+          <Route path="/" element={<Landing />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/feed" element={<Feed />} />
+        </Route>
       </Routes>
-    </BrowserRouter>
-  )
+  );
 }
