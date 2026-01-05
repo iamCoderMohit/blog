@@ -192,23 +192,33 @@ blogRouter.get("/myblogs", async (req, res) => {
 })
 
 //get blogs (all)
+interface Icursor {
+    createdAt: string,
+    id: string
+}
 blogRouter.get("/feed", async (req, res) => {
     try {
-        const {cursorVal}= req.query
+        const {cursorVal} = req.query
 
         const blogs = await prisma.blog.findMany({
             take: 5,
             skip: cursorVal ? 1 : 0,
             //@ts-ignore
             cursor: cursorVal ? {
-                id: cursorVal
-            } : undefined,
+                createdAt_id: {
+                    //@ts-ignore
+                    createdAt: cursorVal.createdAt,
+                    //@ts-ignore
+                    id: cursorVal.id
+                }
+            },
             where: {
                 isPublic: true
             },
-            orderBy: {
-                createdAt: 'desc'
-            }, 
+            orderBy: [
+                {createdAt: 'desc'},
+                {id: 'desc'}
+            ],
             include: {
                 author: {
                     select: {

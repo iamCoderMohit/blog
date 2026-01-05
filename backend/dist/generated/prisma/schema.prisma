@@ -26,8 +26,9 @@ model Blog {
   authorId  String
   isPublic  Boolean  @default(false)
   createdAt DateTime @default(now())
+  likes     Like[]
 
-  likes Like[]
+  @@unique([createdAt, id])
 }
 
 model Like {

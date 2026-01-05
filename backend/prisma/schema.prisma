@@ -27,6 +27,7 @@ model Blog {
   isPublic Boolean @default(false)
   createdAt DateTime @default(now())
 
+  @@unique([createdAt, id])
   likes Like[]
 }
 

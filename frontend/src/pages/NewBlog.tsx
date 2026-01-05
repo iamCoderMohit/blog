@@ -1,6 +1,9 @@
 import axios from "axios";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import MainTheme from "../layouts/MainTheme";
+import { useBlogs } from "../hooks/useBlog";
+import Spinner from "../components/Spinner";
+import PopUp from "../components/PopUp";
 
 function NewBlog() {
   const [title, setTitle] = useState("");
@@ -32,37 +35,44 @@ const contentPlaceholders = [
   "Start creating here...."
 ];
 
-  async function handleClick(title: string, content: string) {
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/blog/new`,
-        { title, content },
-        { withCredentials: true }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  }
+const titlePlace = useMemo(() => titleOpt[Math.floor(Math.random() * titleOpt.length)], [])
+const blogPlace = useMemo(() => contentPlaceholders[Math.floor(Math.random() * contentPlaceholders.length)], [])
+const {postBlog, loading, reqRes, setReqRes} = useBlogs()
+
+async function handleClick() {
+  await postBlog(title, content)
+  setTitle("")
+  setContent("")
+}
+
   return (
     
     <MainTheme>
-      <div>
+      {reqRes.msg ? <PopUp msg={reqRes.msg} status={reqRes.status} showBox={setReqRes} /> : null}
+      <div className="flex flex-col">
         <h1 className="text-2xl font-bold">New blog</h1>
         <div className="h-0.5 bg-blue-700 mt-2 mb-5"></div>
-        {/* <input type="text" onChange={(e) => setTitle(e.target.value)} />
-        <input type="text" onChange={(e) => setContent(e.target.value)} />
-        <button onClick={() => handleClick(title, content)}>New Blog</button> */}
 
         <h1 className="text-5xl font-bold opacity-20 ">title</h1>
-        <input type="text" className="border-b w-full outline-none mt-2 text-2xl font-bold"
-        placeholder={titleOpt[Math.floor(Math.random() * titleOpt.length)]}
+        <input 
+        onChange={(e) => setTitle(e.target.value)}
+        value={title}
+        type="text" className="border-b w-full outline-none mt-2 text-2xl font-bold"
+        placeholder={titlePlace}
         />
 
         <h1 className="text-5xl font-bold opacity-20 mt-5">Blog</h1>
-        <textarea name="" id="" placeholder={contentPlaceholders[Math.floor(Math.random()*contentPlaceholders.length)]}
+        <textarea 
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        name="" id="" placeholder={blogPlace}
         rows={10}
         className="mt-4 w-full outline-none text-lg"
         ></textarea>
+
+        <button 
+        onClick={handleClick}
+        className="bg-blue-600 px-4 rounded-md self-end cursor-pointer text-lg py-1">{loading ? <Spinner /> : "Post"}</button>
       </div>
     </MainTheme>
   );

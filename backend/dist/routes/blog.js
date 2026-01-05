@@ -171,23 +171,27 @@ blogRouter.get("/myblogs", async (req, res) => {
         });
     }
 });
-//get blogs (all)
 blogRouter.get("/feed", async (req, res) => {
     try {
+        //@ts-ignore
         const { cursorVal } = req.query;
         const blogs = await prisma.blog.findMany({
             take: 5,
             skip: cursorVal ? 1 : 0,
             //@ts-ignore
             cursor: cursorVal ? {
-                id: cursorVal
-            } : undefined,
+                createdAt_id: {
+                    createdAt: cursorVal.createdAt,
+                    id: cursorVal.id
+                }
+            } : ,
             where: {
                 isPublic: true
             },
-            orderBy: {
-                createdAt: 'desc'
-            },
+            orderBy: [
+                { createdAt: 'desc' },
+                { id: 'desc' }
+            ],
             include: {
                 author: {
                     select: {

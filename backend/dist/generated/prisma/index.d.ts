@@ -4543,6 +4543,7 @@ export namespace Prisma {
 
   export type BlogWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    createdAt_id?: BlogCreatedAtIdCompoundUniqueInput
     AND?: BlogWhereInput | BlogWhereInput[]
     OR?: BlogWhereInput[]
     NOT?: BlogWhereInput | BlogWhereInput[]
@@ -4553,7 +4554,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Blog"> | Date | string
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
     likes?: LikeListRelationFilter
-  }, "id">
+  }, "id" | "createdAt_id">
 
   export type BlogOrderByWithAggregationInput = {
     id?: SortOrder
@@ -4897,6 +4898,11 @@ export namespace Prisma {
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
+  }
+
+  export type BlogCreatedAtIdCompoundUniqueInput = {
+    createdAt: Date | string
+    id: string
   }
 
   export type BlogCountOrderByAggregateInput = {
