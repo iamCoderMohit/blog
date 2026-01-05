@@ -187,6 +187,13 @@ blogRouter.get("/feed", async (req, res) => {
             },
             orderBy: {
                 createdAt: 'desc'
+            },
+            include: {
+                author: {
+                    select: {
+                        username: true
+                    }
+                }
             }
         });
         //save the last record's id

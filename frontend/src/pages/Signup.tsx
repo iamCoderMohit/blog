@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import { useUsername } from "../hooks/useUsername";
 
 function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [usernameErrMsg, setUsernameErrMsg] = useState("");
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -21,34 +21,19 @@ function Signup() {
     }
   }
 
-  const isFirstRender = useRef(true);
+  const {checkUsername, usernameErrMsg} = useUsername()
 
   useEffect(() => {
     if (!username) return;
 
     const debouncedTimer = setTimeout(async () => {
-      try {
-        const res = await axios.post(
-          `${BACKEND_URL}/auth/check`,
-          { username },
-          { withCredentials: true }
-        );
-        setUsernameErrMsg("username available");
-      } catch (error) {
-        console.error(error);
-        setUsernameErrMsg("username already taken");
-      }
+      await checkUsername(username)
     }, 500);
 
     return () => {
       clearTimeout(debouncedTimer);
     };
   }, [username]);
-
-  async function checkUsername(username: string) {
-    try {
-    } catch (error) {}
-  }
 
   return (
     <div className="w-full flex justify-center items-center">

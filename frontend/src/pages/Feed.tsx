@@ -1,36 +1,38 @@
-import axios from "axios"
-import { useState } from "react"
+import { useEffect } from "react"
+import { useBlogs } from "../hooks/useBlog"
+import BlogCard from "../components/BlogCard"
+import NewBlogMock from "../components/NewBlogMock"
+import MainTheme from "../layouts/MainTheme"
 
 function Feed() {
-    const [blogs, setBlogs] = useState<any[]>([])
-    const [lastBlog, setLastBlog] = useState<any>("")
+    const {getBlogs, blogs, lastBlog, loading} = useBlogs()
+    const bgOpt = ["#fcba03", "#16ab25", "#16ab25", "#182ba8", "#b0259b"]
 
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
-    
-    async function getBlogs(cursor?: any) {
-        try {
-            const res = await axios.get(`${BACKEND_URL}/blog/feed${cursor ? `?cursorVal=${cursor}` : ""}`, {withCredentials: true})
-            
-            setBlogs((prevBlogs: any) => [...prevBlogs, ...res.data.blogs])
-            setLastBlog(res.data.blogs[res.data.blogs.length - 1].id)
-            console.log(lastBlog)
-        } catch (error) {
-            console.error(error)
+    useEffect(() => {
+        async function fetch() {
+            await getBlogs()
         }
-    }
-  return (
-    <div>
-        <h1>Feed</h1>
-        <button onClick={() => getBlogs()}>Get</button>
-        {blogs.map((i: any, ind: any) => (
-            <div>
-                <p>{ind}</p>
-                <p>{i.title}</p>
-            </div>
-        ))}
 
-        <button onClick={() => getBlogs(lastBlog)}>get more</button>
-    </div>
+        fetch()
+    }, [])
+  return (
+    <MainTheme>
+        <h1 className="text-2xl font-bold">Feed</h1>
+
+        <NewBlogMock />
+
+        {loading ? "loading..." : 
+        <div className="flex flex-col gap-5 mt-5">
+            {blogs.map((i: any) => (
+                <BlogCard username={i.author.username} title={i.title} content={i.content} createdAt={i.createdAt} bgColor={bgOpt[Math.floor(Math.random()*bgOpt.length)]} />
+            ))}
+        </div>
+        }
+
+        {blogs ? <button className="bg-blue-600 rounded-md px-3 mx-auto mt-5 cursor-pointer"
+        onClick={() => getBlogs(lastBlog)}
+        >Load More</button> : null }
+    </MainTheme>
   )
 }
 

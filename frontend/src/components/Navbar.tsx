@@ -6,7 +6,7 @@ function Navbar() {
       <div>
         <h1 className="text-2xl font-bold">OpenBlog</h1>
       </div>
-      <div className="flex gap-10 text-xl">
+      <div className="flex gap-10 text-md">
         <button><Link to={"/"}>Home</Link></button>
         <button><Link to={"/feed"}>Feed</Link></button>
         <button><Link to={"/signin"}>Sign in</Link></button>

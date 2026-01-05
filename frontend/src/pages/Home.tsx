@@ -2,7 +2,7 @@ import { useState } from 'react'
 import '../App.css'
 import axios from 'axios'
 import Signin from '../components/Signin'
-import NewBlog from '../components/NewBlog'
+import NewBlog from './NewBlog'
 import ShowBlogs from '../components/ShowBlogs'
 
 function Home() {
