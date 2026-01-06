@@ -48,7 +48,7 @@ async function handleClick() {
   return (
     
     <MainTheme>
-      {reqRes.msg ? <PopUp msg={reqRes.msg} status={reqRes.status} showBox={setReqRes} /> : null}
+      {reqRes ? <PopUp msg={reqRes.msg} status={reqRes.status} showBox={setReqRes} /> : null}
       <div className="flex flex-col">
         <h1 className="text-2xl font-bold">New blog</h1>
         <div className="h-0.5 bg-blue-700 mt-2 mb-5"></div>

@@ -9,6 +9,7 @@ function Navbar() {
       <div className="flex gap-10 text-md">
         <button><Link to={"/"}>Home</Link></button>
         <button><Link to={"/feed"}>Feed</Link></button>
+        <button><Link to={"/myblogs"}>Blogs</Link></button>
         <button><Link to={"/signin"}>Sign in</Link></button>
         <button><Link to={"/signup"}>Sign up</Link></button>
       </div>

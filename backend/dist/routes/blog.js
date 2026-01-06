@@ -9,28 +9,28 @@ blogRouter.post("/new", async (req, res) => {
         const { title, content } = req.body;
         if (!title || !content) {
             return res.status(409).json({
-                msg: "provide title and content!!"
+                msg: "provide title and content!!",
             });
         }
         const blog = await prisma.blog.create({
             data: {
                 title,
                 content,
-                authorId: req.user.id
-            }
+                authorId: req.user.id,
+            },
         });
         res.json({
             blog: {
                 title: blog.title,
                 content: blog.content,
-                createdAt: blog.createdAt
-            }
+                createdAt: blog.createdAt,
+            },
         });
     }
     catch (error) {
         console.error(error);
         res.status(500).json({
-            msg: "something went wrong!!"
+            msg: "something went wrong!!",
         });
     }
 });
@@ -40,22 +40,22 @@ blogRouter.delete("/delete/:blogId", async (req, res) => {
         const { blogId } = req.params;
         if (!blogId) {
             res.status(404).json({
-                msg: "blog id must be provided!!"
+                msg: "blog id must be provided!!",
             });
         }
         const deleteBlog = await prisma.blog.delete({
             where: {
-                id: blogId
-            }
+                id: blogId,
+            },
         });
         res.json({
-            msg: "deleted blog!!"
+            msg: "deleted blog!!",
         });
     }
     catch (error) {
         console.error(error);
         res.status(500).json({
-            msg: "something went wrong!!"
+            msg: "something went wrong!!",
         });
     }
 });
@@ -66,8 +66,8 @@ blogRouter.post("/like/:blogId", async (req, res) => {
         const alreadyLiked = await prisma.like.findFirst({
             where: {
                 userId: req.user.id,
-                postId: blogId
-            }
+                postId: blogId,
+            },
         });
         console.log(alreadyLiked);
         if (alreadyLiked) {
@@ -76,45 +76,45 @@ blogRouter.post("/like/:blogId", async (req, res) => {
                     where: {
                         userId_postId: {
                             userId: req.user.id,
-                            postId: blogId
-                        }
-                    }
+                            postId: blogId,
+                        },
+                    },
                 });
                 if (!unlike) {
                     return res.status(500).json({
-                        msg: "couldn't unlike blog!!"
+                        msg: "couldn't unlike blog!!",
                     });
                 }
                 return res.json({
-                    msg: "unliked successfully!!"
+                    msg: "unliked successfully!!",
                 });
             }
             catch (error) {
                 console.error(error);
                 return res.status(500).json({
-                    msg: "couldn't unlike blog!!"
+                    msg: "couldn't unlike blog!!",
                 });
             }
         }
         const like = await prisma.like.create({
             data: {
                 userId: req.user.id,
-                postId: blogId
-            }
+                postId: blogId,
+            },
         });
         if (like) {
             res.json({
-                msg: "liked post!!"
+                msg: "liked post!!",
             });
         }
         res.status(500).json({
-            msg: "couldn't like the post!!"
+            msg: "couldn't like the post!!",
         });
     }
     catch (error) {
         console.error(error);
         res.status(500).json({
-            msg: "something went wrong!!"
+            msg: "something went wrong!!",
         });
     }
 });
@@ -124,7 +124,7 @@ blogRouter.get("/getlikes/:blogId", async (req, res) => {
         const { blogId } = req.params;
         if (!blogId) {
             res.status(404).json({
-                msg: "please provide blog id!!"
+                msg: "please provide blog id!!",
             });
         }
         const likes = await prisma.like.findMany({
@@ -135,19 +135,19 @@ blogRouter.get("/getlikes/:blogId", async (req, res) => {
                 user: {
                     select: {
                         id: true,
-                        username: true
-                    }
-                }
-            }
+                        username: true,
+                    },
+                },
+            },
         });
         res.json({
-            likes
+            likes,
         });
     }
     catch (error) {
         console.error(error);
         res.status(500).json({
-            msg: "something went wrong!!"
+            msg: "something went wrong!!",
         });
     }
 });
@@ -155,43 +155,24 @@ blogRouter.get("/getlikes/:blogId", async (req, res) => {
 blogRouter.get("/myblogs", async (req, res) => {
     try {
         const userId = req.user.id;
-        const blogs = await prisma.blog.findMany({
-            where: {
-                authorId: userId
-            }
-        });
-        res.json({
-            blogs
-        });
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({
-            msg: "something went wrong!!"
-        });
-    }
-});
-blogRouter.get("/feed", async (req, res) => {
-    try {
-        //@ts-ignore
-        const { cursorVal } = req.query;
+        const { createdAt, id } = req.query;
+        const cursor = {
+            createdAt,
+            id
+        };
         const blogs = await prisma.blog.findMany({
             take: 5,
-            skip: cursorVal ? 1 : 0,
-            //@ts-ignore
-            cursor: cursorVal ? {
+            skip: createdAt && id ? 1 : 0,
+            cursor: createdAt && id ? {
                 createdAt_id: {
-                    createdAt: cursorVal.createdAt,
-                    id: cursorVal.id
+                    createdAt: cursor.createdAt,
+                    id: cursor.id
                 }
-            } : ,
+            } : undefined,
             where: {
-                isPublic: true
+                authorId: userId,
             },
-            orderBy: [
-                { createdAt: 'desc' },
-                { id: 'desc' }
-            ],
+            orderBy: [{ createdAt: "desc" }, { id: "desc" }],
             include: {
                 author: {
                     select: {
@@ -200,10 +181,59 @@ blogRouter.get("/feed", async (req, res) => {
                 }
             }
         });
-        //save the last record's id
-        //and in next call start from there
+        const nextCursor = blogs.length > 0 ? {
+            createdAt: blogs[blogs.length - 1].createdAt,
+            id: blogs[blogs.length - 1].id
+        } : null;
         res.json({
-            blogs
+            blogs,
+            nextCursor
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            msg: "something went wrong!!",
+        });
+    }
+});
+blogRouter.get("/feed", async (req, res) => {
+    try {
+        const { createdAt, id } = req.query;
+        const cursorVal = {
+            createdAt,
+            id
+        };
+        const blogs = await prisma.blog.findMany({
+            take: 5,
+            skip: createdAt && id ? 1 : 0,
+            cursor: createdAt && id
+                ? {
+                    createdAt_id: {
+                        createdAt: cursorVal.createdAt,
+                        id: cursorVal.id,
+                    },
+                }
+                : undefined,
+            where: {
+                isPublic: true,
+            },
+            orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+            include: {
+                author: {
+                    select: {
+                        username: true,
+                    },
+                },
+            },
+        });
+        const nextCursor = blogs.length > 0 ? {
+            createdAt: blogs[blogs.length - 1].createdAt,
+            id: blogs[blogs.length - 1].id
+        } : null;
+        res.json({
+            blogs,
+            nextCursor
         });
     }
     catch (error) {
@@ -217,31 +247,31 @@ blogRouter.post("/change/:blogId", async (req, res) => {
         const { blogId } = req.params;
         const blog = await prisma.blog.findUnique({
             where: {
-                id: blogId
-            }
+                id: blogId,
+            },
         });
         const updateBlog = await prisma.blog.update({
             where: {
                 id: blogId,
-                authorId: req.user.id
+                authorId: req.user.id,
             },
             data: {
-                isPublic: !blog?.isPublic
-            }
+                isPublic: !blog?.isPublic,
+            },
         });
         if (updateBlog) {
             res.json({
-                msg: "visibility changed successfully!!"
+                msg: "visibility changed successfully!!",
             });
         }
         res.json({
-            msg: "can't change visibility!!"
+            msg: "can't change visibility!!",
         });
     }
     catch (error) {
         console.error(error);
         res.status(500).json({
-            msg: "something went wrong!!"
+            msg: "something went wrong!!",
         });
     }
 });

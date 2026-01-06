@@ -5,7 +5,7 @@ import NewBlogMock from "../components/NewBlogMock"
 import MainTheme from "../layouts/MainTheme"
 
 function Feed() {
-    const {getBlogs, blogs, lastBlog, loading} = useBlogs()
+    const {getBlogs, blogs, cursor, loading} = useBlogs()
     const bgOpt = ["#fcba03", "#16ab25", "#16ab25", "#182ba8", "#b0259b"]
 
     useEffect(() => {
@@ -24,13 +24,13 @@ function Feed() {
         {loading ? "loading..." : 
         <div className="flex flex-col gap-5 mt-5">
             {blogs.map((i: any) => (
-                <BlogCard username={i.author.username} title={i.title} content={i.content} createdAt={i.createdAt} bgColor={bgOpt[Math.floor(Math.random()*bgOpt.length)]} />
+                <BlogCard username={i.author.username} title={i.title} content={i.content} createdAt={i.createdAt} id={i.id} bgColor={bgOpt[Math.floor(Math.random()*bgOpt.length)]} />
             ))}
         </div>
         }
 
         {blogs ? <button className="bg-blue-600 rounded-md px-3 mx-auto mt-5 cursor-pointer"
-        onClick={() => getBlogs(lastBlog)}
+        onClick={() => getBlogs()}
         >Load More</button> : null }
     </MainTheme>
   )

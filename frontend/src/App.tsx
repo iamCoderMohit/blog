@@ -5,6 +5,8 @@ import BgTheme from "./layouts/BgTheme";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import NewBlog from "./pages/NewBlog";
+import MyBlogs from "./pages/MyBlogs";
+import BlogDetails from "./pages/BlogDetails";
 
 export default function App() {
   return (
@@ -15,6 +17,8 @@ export default function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/feed" element={<Feed />} />
           <Route path="/new" element={<NewBlog />} />
+          <Route path="/myblogs" element={<MyBlogs />} />
+          <Route path="/blog/:id" element={<BlogDetails />} />
         </Route>
       </Routes>
   );
