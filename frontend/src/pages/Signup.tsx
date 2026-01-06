@@ -9,12 +9,11 @@ function Signup() {
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-  async function handleSignin(username: string, password: string) {
+  async function handleSignup(username: string, password: string, email: string) {
     try {
       axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/auth/signin`,
-        { username, password },
-        { withCredentials: true }
+        `${BACKEND_URL}/auth/signup`,
+        { username, password, email },
       );
     } catch (error) {
       console.log(error);
@@ -62,7 +61,7 @@ function Signup() {
         />
         <button
           className="bg-blue-700 p-3 rounded-xl text-white text-lg cursor-pointer"
-          onClick={() => handleSignin(username, password)}
+          onClick={() => handleSignup(username, password, email)}
         >
           Enter
         </button>

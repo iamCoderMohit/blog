@@ -67,6 +67,38 @@ blogRouter.delete("/delete/:blogId", async (req, res) => {
   }
 });
 
+//check if already liked
+blogRouter.get("/checkLike/:blogId", async (req, res) => {
+  try {
+    const userId = req.user.id
+    const {blogId} = req.params
+
+    const alreadyLiked = await prisma.like.findFirst({
+      where: {
+        userId: userId,
+        postId: blogId
+      }
+    })
+
+    if(alreadyLiked){
+      return res.json({
+        msg: "already like",
+        isLiked: true
+      })
+    }
+
+    res.json({
+      msg: "not liked",
+      isLiked: false
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      msg: "something went wrong!!"
+    })
+  }
+})
+
 //like a blog
 blogRouter.post("/like/:blogId", async (req, res) => {
   try {
@@ -78,8 +110,6 @@ blogRouter.post("/like/:blogId", async (req, res) => {
         postId: blogId,
       },
     });
-
-    console.log(alreadyLiked);
 
     if (alreadyLiked) {
       try {

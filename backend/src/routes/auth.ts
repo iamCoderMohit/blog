@@ -2,6 +2,7 @@ import express from 'express'
 import prisma from '../config/prisma.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import strict from 'node:assert/strict'
 
 const authRouter = express.Router()
 
@@ -37,7 +38,8 @@ authRouter.post('/signup', async (req, res) => {
         res.cookie("token", jwttoken, {
             httpOnly: true,
             sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/"
         })
 
         return res.json({
@@ -81,7 +83,8 @@ authRouter.post("/signin", async (req, res) => {
         res.cookie("token", jwttoken, {
             httpOnly: true,
             sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/"
         })
 
         return res.json({
@@ -97,7 +100,11 @@ authRouter.post("/signin", async (req, res) => {
 
 authRouter.post("/logout", async (req, res) => {
     try {
-        res.clearCookie("token")
+        res.clearCookie("token", {
+            httpOnly: true,
+            sameSite: "strict",
+            path: '/'
+        })
 
         res.json({
             msg: "successfully logged out!!"

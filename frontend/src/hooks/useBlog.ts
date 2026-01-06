@@ -17,6 +17,7 @@ export function useBlogs() {
   const [cursor, setCursor] = useState<ICursor | null>(null);
   const [reqRes, setReqRes] = useState<reqRes | null>(null);
   const [myBlogs, setMyblogs] = useState([]);
+  const [isLiked, setIsLiked] = useState(false)
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -79,6 +80,40 @@ export function useBlogs() {
     }
   };
 
+  const likeBlog = async (id: string) => {
+    try {
+      const res = await axios.post(`${BACKEND_URL}/blog/like/${id}`, {}, {withCredentials: true})
+      setReqRes({msg: "liked!", status: res.status})
+      setIsLiked(prev => !prev)
+    } catch (error) {
+      setReqRes({msg: "couldn't like!", status: 500})
+      console.error(error)
+    }
+  }
+
+  const checkLike = async (id: string) => {
+    try {
+      setLoading(true)
+      const res = await axios.get(`${BACKEND_URL}/blog/checkLike/${id}`, {withCredentials: true})
+      setIsLiked(res.data.isLiked)
+      setLoading(false)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const [likes, setLikes] = useState([])
+  const countLikes = async (id: string) => {
+    try {
+      setLoading(true)
+      const res = await axios.get(`${BACKEND_URL}/blog/getlikes/${id}`, {withCredentials: true})
+      setLikes(res.data.likes)
+      setLoading(false)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return {
     getBlogs,
     blogs,
@@ -89,5 +124,10 @@ export function useBlogs() {
     cursor,
     myBlogs,
     getMyBlogs,
+    likeBlog,
+    checkLike,
+    isLiked,
+    likes,
+    countLikes
   };
 }

@@ -3,6 +3,7 @@ import BlogCard from "../components/BlogCard";
 import PopUp from "../components/PopUp";
 import { useBlogs } from "../hooks/useBlog";
 import MainTheme from "../layouts/MainTheme";
+import type { Inputs } from "../commonInputs/interface";
 
 function MyBlogs() {
     const {myBlogs, loading, reqRes, setReqRes, getMyBlogs} = useBlogs()
@@ -21,8 +22,8 @@ function MyBlogs() {
         {reqRes ? <PopUp msg={reqRes.msg} status={reqRes.status} showBox={setReqRes} /> : null}
         <h1 className="font-bold text-2xl mb-5">My Blogs</h1>
         {loading ? "loading..." : <div className="flex flex-col gap-5">
-            {myBlogs.map((i: any) => (
-                <BlogCard username={i.author.username} title={i.title} content={i.content} createdAt={i.createdAt} bgColor="#c49206" id={i.id} />
+            {myBlogs.map((i: Inputs) => (
+                <BlogCard i={i} bgColor="#ff00ff" />
             ))}
         </div> }
 

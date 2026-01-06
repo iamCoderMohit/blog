@@ -1,51 +1,44 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { Inputs } from "../commonInputs/interface";
+import { hexToRgba } from "../helpers/hextorgb";
 
-interface Inputs {
-  username: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  bgColor: string;
-  id: string
-}
+function BlogCard({ i, bgColor }: { i: Inputs; bgColor: string }) {
+  // username, title, content, createdAt, bgColor, id
+  const date = new Date(i.createdAt);
+  const formatted = date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 
-//add bg to cards
+  const navigate = useNavigate();
 
-function BlogCard({ username, title, content, createdAt, bgColor, id }: Inputs) {
-    const date = new Date(createdAt)
-    const formatted = date.toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric"
-    })
 
-    const navigate = useNavigate()
 
-    const hexToRgba = (hex: any, alpha: any) => {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-};
+  const [hover, setHover] = useState(false);
 
   return (
-    <div className={`cursor-pointer rounded-md p-3`}
-    style={{backgroundColor: hexToRgba(bgColor, 0.1)}}
-    onClick={() => navigate(`/blog/${id}`)}
+    <div
+      className={`cursor-pointer rounded-md p-3`}
+      style={{ backgroundColor: hexToRgba(bgColor, hover ? 0.2 : 0.1) }}
+      onClick={() => navigate(`/blog/${i.id}`, { state: {i, bgColor} })}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
     >
       <div className="flex items-center gap-3">
         <div
           className="h-5 w-5 flex items-center justify-center rounded-full p-4"
           style={{ backgroundColor: bgColor }}
-        > 
-          {username[0].toUpperCase()}
+        >
+          {i.author.username[0].toUpperCase()}
         </div>
-        <h1 className="">{username}</h1>
+        <h1 className="">{i.author.username}</h1>
       </div>
 
       <div className="pl-10">
-        <h1 className="font-bold text-lg">{title}</h1>
-      <p>{content}</p>
+        <h1 className="font-bold text-lg">{i.title}</h1>
+        <p>{i.content}</p>
       </div>
 
       <span>{formatted}</span>
