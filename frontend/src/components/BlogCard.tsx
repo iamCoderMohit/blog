@@ -3,8 +3,15 @@ import { useNavigate } from "react-router-dom";
 import type { Inputs } from "../commonInputs/interface";
 import { hexToRgba } from "../helpers/hextorgb";
 
-function BlogCard({ i, bgColor }: { i: Inputs; bgColor: string }) {
-  // username, title, content, createdAt, bgColor, id
+function BlogCard({
+  i,
+  bgColor,
+  isEdit,
+}: {
+  i: Inputs;
+  bgColor: string;
+  isEdit?: boolean;
+}) {
   const date = new Date(i.createdAt);
   const formatted = date.toLocaleDateString("en-GB", {
     day: "numeric",
@@ -14,18 +21,17 @@ function BlogCard({ i, bgColor }: { i: Inputs; bgColor: string }) {
 
   const navigate = useNavigate();
 
-
-
   const [hover, setHover] = useState(false);
 
   return (
     <div
       className={`cursor-pointer rounded-md p-3`}
       style={{ backgroundColor: hexToRgba(bgColor, hover ? 0.2 : 0.1) }}
-      onClick={() => navigate(`/blog/${i.id}`, { state: {i, bgColor} })}
+      onClick={() => navigate(`/blog/${i.id}`, { state: { i, bgColor, isEdit } })}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
+      {isEdit && <div>hey</div>}
       <div className="flex items-center gap-3">
         <div
           className="h-5 w-5 flex items-center justify-center rounded-full p-4"

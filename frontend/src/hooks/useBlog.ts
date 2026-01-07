@@ -114,6 +114,18 @@ export function useBlogs() {
     }
   }
 
+  const [isPublic, setIsPublic] = useState(false)
+  const changeVisibility = async (id: string) => {
+    try {
+      const res = await axios.post(`${BACKEND_URL}/blog/change/${id}`, {}, {withCredentials: true})
+      setIsPublic(res.data.isPublic)
+      setReqRes({msg: "changed visibility", status: res.status})
+    } catch (error) {
+      console.error(error)
+      setReqRes({msg: "can't change visibility", status: 500})
+    }
+  }
+
   return {
     getBlogs,
     blogs,

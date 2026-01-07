@@ -20,7 +20,8 @@ function BlogDetails() {
     likes,
   } = useBlogs();
 
-  const [openDialog, setOpenDialog] = useState(true)
+  const [openDialog, setOpenDialog] = useState(false)
+  const isEdit = blog.isEdit
 
   useEffect(() => {
     async function fetch() {
@@ -43,6 +44,20 @@ function BlogDetails() {
         style={{ backgroundColor: hexToRgba(blog.bgColor, 0.1) }}
         className="h-full p-5 rounded-xl"
       >
+        {isEdit && <div className="flex justify-between mb-5">
+          <div className="flex items-center">
+            <h1>Change visibility - </h1>
+            <select name="" id="" className="text-white px-2 py-1 rounded-md"
+            style={{backgroundColor: hexToRgba(blog.bgColor, 0.2)}}
+            >
+              <option value="" className="bg-gray-900">Private</option>
+              <option value="" className="bg-gray-900">Public</option>
+            </select>
+          </div>
+
+          <div className="bg-blue-600 rounded-md px-3 flex items-center cursor-pointer">Edit Blog
+          </div>
+        </div>  }
         <h1 className="text-3xl font-bold">{blog.i.title}</h1>
         <div className="mt-5 flex items-center gap-3">
           <div className="cursor-pointer flex" onClick={handleLike}>
@@ -65,7 +80,7 @@ function BlogDetails() {
         <p className="text-lg mt-5">{blog.i.content}</p>
       </div>
 
-      {openDialog ? <BottomDialog /> : null}
+      <BottomDialog persons={likes} showBox={setOpenDialog} isOpen={openDialog} />
     </MainTheme>
   );
 }

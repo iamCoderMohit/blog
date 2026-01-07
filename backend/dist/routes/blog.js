@@ -290,10 +290,12 @@ blogRouter.post("/change/:blogId", async (req, res) => {
         if (updateBlog) {
             res.json({
                 msg: "visibility changed successfully!!",
+                isPublic: updateBlog.isPublic
             });
         }
         res.json({
             msg: "can't change visibility!!",
+            isPublic: updateBlog.isPublic
         });
     }
     catch (error) {

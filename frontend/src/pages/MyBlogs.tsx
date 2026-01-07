@@ -23,7 +23,7 @@ function MyBlogs() {
         <h1 className="font-bold text-2xl mb-5">My Blogs</h1>
         {loading ? "loading..." : <div className="flex flex-col gap-5">
             {myBlogs.map((i: Inputs) => (
-                <BlogCard i={i} bgColor="#ff00ff" />
+                <BlogCard i={i} bgColor="#ff00ff" isEdit={true} />
             ))}
         </div> }
 
