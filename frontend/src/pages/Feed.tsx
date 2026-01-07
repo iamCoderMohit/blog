@@ -29,10 +29,7 @@ function Feed() {
           {blogs.map((i: Inputs) => (
             <BlogCard i={i} bgColor={bgOpt[Math.floor(Math.random() * bgOpt.length)]} />
           ))}
-        </div>
-      )}
-
-      {blogs ? (
+           {blogs ? (
         <button
           className="bg-blue-600 rounded-md px-3 mx-auto mt-5 cursor-pointer"
           onClick={() => getBlogs()}
@@ -40,6 +37,10 @@ function Feed() {
           Load More
         </button>
       ) : null}
+        </div>
+     
+      )}
+
     </MainTheme>
   );
 }

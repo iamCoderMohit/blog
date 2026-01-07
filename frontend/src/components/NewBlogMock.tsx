@@ -13,6 +13,7 @@ function NewBlogMock() {
             type="text" className="text-xl mt-2 outline-0 w-full" placeholder={placeholder[Math.floor(Math.random()*placeholder.length)]} />
             <button className="bg-blue-700 px-4 rounded-md cursor-pointer">Post</button>
         </div>
+        <div className="h-0.5 bg-blue-700 mt-4"></div>
     </div>
   )
 }

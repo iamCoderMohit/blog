@@ -31,7 +31,6 @@ function BlogCard({
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      {isEdit && <div>hey</div>}
       <div className="flex items-center gap-3">
         <div
           className="h-5 w-5 flex items-center justify-center rounded-full p-4"

@@ -6,32 +6,39 @@ import MainTheme from "../layouts/MainTheme";
 import type { Inputs } from "../commonInputs/interface";
 
 function MyBlogs() {
-    const {myBlogs, loading, reqRes, setReqRes, getMyBlogs} = useBlogs()
+  const { myBlogs, loading, reqRes, setReqRes, getMyBlogs } = useBlogs();
 
-    useEffect(() => {
-        async function fetch(){
-            await getMyBlogs()
-        }
+  useEffect(() => {
+    async function fetch() {
+      await getMyBlogs();
+    }
 
-        fetch()
-    }, [])
+    fetch();
+  }, []);
 
   return (
     <MainTheme>
-        edit blog
-        {reqRes ? <PopUp msg={reqRes.msg} status={reqRes.status} showBox={setReqRes} /> : null}
-        <h1 className="font-bold text-2xl mb-5">My Blogs</h1>
-        {loading ? "loading..." : <div className="flex flex-col gap-5">
-            {myBlogs.map((i: Inputs) => (
-                <BlogCard i={i} bgColor="#ff00ff" isEdit={true} />
-            ))}
-        </div> }
-
-        <button className="bg-blue-700 px-4 cursor-pointer rounded-md mt-5"
-        onClick={() => getMyBlogs()}
-        >Load more</button>
+      {reqRes ? (
+        <PopUp msg={reqRes.msg} status={reqRes.status} showBox={setReqRes} />
+      ) : null}
+      <h1 className="font-bold text-2xl mb-5">My Blogs</h1>
+      {loading ? (
+        "loading..."
+      ) : (
+        myBlogs.length > 0 ? <div className="flex flex-col gap-5">
+          {myBlogs.map((i: Inputs) => (
+            <BlogCard i={i} bgColor="#ff00ff" isEdit={true} />
+          ))}
+          <button
+            className="bg-blue-700 px-4 cursor-pointer rounded-md mt-5"
+            onClick={() => getMyBlogs()}
+          >
+            Load more
+          </button>
+        </div> : <h1>nothing to see here</h1>
+      )}
     </MainTheme>
-  )
+  );
 }
 
-export default MyBlogs
+export default MyBlogs;

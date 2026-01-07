@@ -130,6 +130,7 @@ blogRouter.post("/like/:blogId", async (req, res) => {
 
         return res.json({
           msg: "unliked successfully!!",
+          isLiked: false
         });
       } catch (error) {
         console.error(error);
@@ -149,6 +150,7 @@ blogRouter.post("/like/:blogId", async (req, res) => {
     if (like) {
       res.json({
         msg: "liked post!!",
+        isLiked: true
       });
     }
 
@@ -303,6 +305,32 @@ blogRouter.get("/feed", async (req, res) => {
   }
 });
 
+//check visibility
+blogRouter.get("/check/:blogId", async (req, res) => {
+  try {
+    const blog = await prisma.blog.findFirst({
+      where: {
+        id: req.params.blogId
+      }
+    })
+
+    if(blog){
+      res.json({
+        isPublic: blog.isPublic
+      })
+    }
+
+    res.status(404).json({
+      msg: "can't find blog!!"
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      msg: "something went wrong!!"
+    })
+  }
+})
+
 //change visibiltiy (public/ private)
 blogRouter.post("/change/:blogId", async (req, res) => {
   try {
@@ -342,5 +370,58 @@ blogRouter.post("/change/:blogId", async (req, res) => {
     });
   }
 });
+
+//edit blog
+blogRouter.post("/edit/:blogId", async (req, res) => {
+  try {
+    const {title, content} = req.body
+    const blogId = req.params.blogId
+
+    const updatedBlog = await prisma.blog.update({
+      where: {
+        id: blogId
+      },
+      data: {
+        title: title,
+        content: content
+      }
+    })
+
+    res.json({
+      updatedBlog
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      msg: "something went wrong!!"
+    })
+  }
+})
+
+//get one blog
+blogRouter.get("/get/:blogId", async (req, res) => {
+  try {
+    const blog = await prisma.blog.findFirst({
+      where: {
+        id: req.params.blogId
+      }
+    })
+
+    if(blog){
+      return res.json({
+        blog
+      })
+    }
+
+    res.status(404).json({
+      msg: "can't find blog!!"
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      msg: "something went wrong!!"
+    })
+  }
+})
 
 export default blogRouter;

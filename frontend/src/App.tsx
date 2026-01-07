@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import NewBlog from "./pages/NewBlog";
 import MyBlogs from "./pages/MyBlogs";
 import BlogDetails from "./pages/BlogDetails";
+import EditBlog from "./pages/EditBlog";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/new" element={<NewBlog />} />
           <Route path="/myblogs" element={<MyBlogs />} />
           <Route path="/blog/:id" element={<BlogDetails />} />
+          <Route path="/blog/edit/:id" element={<EditBlog />} />
         </Route>
       </Routes>
   );

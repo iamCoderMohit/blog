@@ -83,7 +83,7 @@ export function useBlogs() {
   const likeBlog = async (id: string) => {
     try {
       const res = await axios.post(`${BACKEND_URL}/blog/like/${id}`, {}, {withCredentials: true})
-      setReqRes({msg: "liked!", status: res.status})
+      setReqRes({msg: res.data.isLiked ? "Liked!" : "unliked!", status: res.status})
       setIsLiked(prev => !prev)
     } catch (error) {
       setReqRes({msg: "couldn't like!", status: 500})
@@ -115,6 +115,15 @@ export function useBlogs() {
   }
 
   const [isPublic, setIsPublic] = useState(false)
+  const checkVisibility = async (id: string) => {
+    try {
+      const res = await axios.get(`${BACKEND_URL}/blog/check/${id}`, {withCredentials: true})
+      setIsPublic(res.data.isPublic)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const changeVisibility = async (id: string) => {
     try {
       const res = await axios.post(`${BACKEND_URL}/blog/change/${id}`, {}, {withCredentials: true})
@@ -123,6 +132,16 @@ export function useBlogs() {
     } catch (error) {
       console.error(error)
       setReqRes({msg: "can't change visibility", status: 500})
+    }
+  }
+
+  const deleteBlog = async (id: string) => {
+    try {
+      await axios.delete(`${BACKEND_URL}/blog/delete/${id}`,  {withCredentials: true})
+      setReqRes({msg: "deleted!!", status: 200})
+    } catch (error) {
+      console.error(error)
+      setReqRes({msg: "can't delete", status: 500})
     }
   }
 
@@ -140,6 +159,10 @@ export function useBlogs() {
     checkLike,
     isLiked,
     likes,
-    countLikes
+    countLikes,
+    changeVisibility,
+    checkVisibility,
+    isPublic,
+    deleteBlog
   };
 }

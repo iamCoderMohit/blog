@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import MainTheme from "../layouts/MainTheme";
 import { hexToRgba } from "../helpers/hextorgb";
 import { AiOutlineDislike, AiOutlineLike } from "react-icons/ai";
@@ -6,6 +6,9 @@ import { useBlogs } from "../hooks/useBlog";
 import PopUp from "../components/PopUp";
 import { useEffect, useState } from "react";
 import BottomDialog from "../components/BottomDialog";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { FcDislike, FcLike } from "react-icons/fc";
+import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 
 function BlogDetails() {
   const blog = useLocation().state;
@@ -18,15 +21,21 @@ function BlogDetails() {
     checkLike,
     countLikes,
     likes,
+    changeVisibility,
+    checkVisibility,
+    isPublic,
+    deleteBlog,
   } = useBlogs();
 
-  const [openDialog, setOpenDialog] = useState(false)
-  const isEdit = blog.isEdit
+  const [openDialog, setOpenDialog] = useState(false);
+  const isEdit = blog.isEdit;
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetch() {
       await checkLike(blog.i.id);
       await countLikes(blog.i.id);
+      await checkVisibility(blog.i.id);
     }
 
     fetch();
@@ -35,52 +44,92 @@ function BlogDetails() {
   async function handleLike() {
     await likeBlog(blog.i.id);
   }
+
+  async function handleDelete() {
+    await deleteBlog(blog.i.id);
+    navigate("/myblogs");
+  }
   return (
     <MainTheme>
-      {reqRes ? (
-        <PopUp msg={reqRes?.msg} status={reqRes?.status} showBox={setReqRes} />
-      ) : null}
+
+        <PopUp msg={reqRes?.msg} status={reqRes?.status} showBox={setReqRes} reqRes={reqRes} />
+
       <div
         style={{ backgroundColor: hexToRgba(blog.bgColor, 0.1) }}
         className="h-full p-5 rounded-xl"
       >
-        {isEdit && <div className="flex justify-between mb-5">
-          <div className="flex items-center">
-            <h1>Change visibility - </h1>
-            <select name="" id="" className="text-white px-2 py-1 rounded-md"
-            style={{backgroundColor: hexToRgba(blog.bgColor, 0.2)}}
-            >
-              <option value="" className="bg-gray-900">Private</option>
-              <option value="" className="bg-gray-900">Public</option>
-            </select>
-          </div>
+        {isEdit && (
+          <div className="flex justify-between mb-5">
+            <div className="flex items-center gap-5">
+              <h1>Change visibility - </h1>
+              <h1>currently {isPublic ? "public" : "private"}</h1>
+              <select
+                name=""
+                id=""
+                className="text-white px-2 py-1 rounded-md"
+                style={{ backgroundColor: hexToRgba(blog.bgColor, 0.2) }}
+                onChange={() => changeVisibility(blog.i.id)}
+              >
+                <option value="" className="bg-gray-900">
+                  {isPublic ? "Public" : "Private"}
+                </option>
+                <option value="" className="bg-gray-900">
+                  {isPublic ? "Private" : "Public"}
+                </option>
+              </select>
+            </div>
 
-          <div className="bg-blue-600 rounded-md px-3 flex items-center cursor-pointer">Edit Blog
+            <div className="flex gap-3">
+              <div
+                className="bg-blue-600 rounded-md px-3 flex items-center cursor-pointer"
+                onClick={handleDelete}
+              >
+                <MdDelete />
+              </div>
+
+              <div
+                onClick={() =>
+                  navigate(`/blog/edit/${blog.i.id}`, {
+                    state: { bgColor: blog.bgColor },
+                  })
+                }
+                className="bg-blue-600 rounded-md px-3 flex items-center cursor-pointer"
+              >
+                <MdEdit />
+              </div>
+            </div>
           </div>
-        </div>  }
+        )}
         <h1 className="text-3xl font-bold">{blog.i.title}</h1>
         <div className="mt-5 flex items-center gap-3">
           <div className="cursor-pointer flex" onClick={handleLike}>
-            {loading ? (
-              "loading..."
-            ) : isLiked ? (
+            {isLiked ? (
               <div className="text-3xl">
-                <AiOutlineDislike />
+                <IoHeartSharp color="red" />
               </div>
             ) : (
               <div className="text-3xl">
-                <AiOutlineLike />{" "}
+                <IoHeartOutline color="" />
               </div>
             )}
           </div>
-          {likes && <h1 className="text-lg cursor-pointer"
-          onClick={() => setOpenDialog(true)}
-          >{likes.length} &gt;</h1>}
+          {likes && (
+            <h1
+              className="text-lg cursor-pointer"
+              onClick={() => setOpenDialog(true)}
+            >
+              {likes.length} &gt;
+            </h1>
+          )}
         </div>
         <p className="text-lg mt-5">{blog.i.content}</p>
       </div>
 
-      <BottomDialog persons={likes} showBox={setOpenDialog} isOpen={openDialog} />
+      <BottomDialog
+        persons={likes}
+        showBox={setOpenDialog}
+        isOpen={openDialog}
+      />
     </MainTheme>
   );
 }
