@@ -19,12 +19,13 @@ export function useBlogs() {
   const [reqRes, setReqRes] = useState<reqRes | null>(null);
   const [myBlogs, setMyblogs] = useState([]);
   const [isLiked, setIsLiked] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const getBlogs = async () => {
     try {
-      if(cursor === null){
+      if(cursor === null || !hasMore){
         return
       }
       setLoading(true);  
@@ -39,6 +40,7 @@ export function useBlogs() {
          (prevBlogs: any) => [...prevBlogs, ...res.data.blogs]
       );
       setCursor(res.data.nextCursor);
+      setHasMore(Boolean(res.data.nextCursor))
       setReqRes({ msg: "fetched blogs", status: 200, isOpen: true });
       setLoading(false);
     } catch (error) {
@@ -149,6 +151,7 @@ export function useBlogs() {
 
   return {
     getBlogs,
+    hasMore,
     blogs,
     loading,
     postBlog,
