@@ -4,6 +4,7 @@ import MainTheme from "../layouts/MainTheme";
 import { useBlogs } from "../hooks/useBlog";
 import Spinner from "../components/Spinner";
 import PopUp from "../components/PopUp";
+import { useNavigate } from "react-router-dom";
 
 function NewBlog() {
   const [title, setTitle] = useState("");
@@ -38,17 +39,19 @@ const contentPlaceholders = [
 const titlePlace = useMemo(() => titleOpt[Math.floor(Math.random() * titleOpt.length)], [])
 const blogPlace = useMemo(() => contentPlaceholders[Math.floor(Math.random() * contentPlaceholders.length)], [])
 const {postBlog, loading, reqRes, setReqRes} = useBlogs()
+const navigate = useNavigate()
 
 async function handleClick() {
   await postBlog(title, content)
   setTitle("")
   setContent("")
+  navigate("/myblogs")
 }
 
   return (
     
     <MainTheme>
-      {reqRes ? <PopUp msg={reqRes.msg} status={reqRes.status} showBox={setReqRes} /> : null}
+      <PopUp msg={reqRes?.msg ?? "something went wrong!!"} status={reqRes?.status ?? 500} setIsOpen={setReqRes} isOpen={reqRes?.isOpen} />
       <div className="flex flex-col">
         <h1 className="text-2xl font-bold">New blog</h1>
         <div className="h-0.5 bg-blue-700 mt-2 mb-5"></div>

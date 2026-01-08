@@ -1,3 +1,4 @@
+import { MdCancel } from "react-icons/md";
 import MainTheme from "../layouts/MainTheme";
 import UserBox from "./UserBox";
 
@@ -32,10 +33,10 @@ function BottomDialog({
         </div>
 
         <div
-          className="absolute top-5 cursor-pointer right-5"
+          className="absolute top-5 cursor-pointer right-5 text-2xl"
           onClick={() => showBox(false)}
         >
-          X
+          <MdCancel />
         </div>
       </div>
     </MainTheme>

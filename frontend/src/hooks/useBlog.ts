@@ -4,6 +4,7 @@ import { useState } from "react";
 interface reqRes {
   msg: string;
   status: number;
+  isOpen: boolean
 }
 
 interface ICursor {
@@ -14,7 +15,7 @@ interface ICursor {
 export function useBlogs() {
   const [blogs, setBlogs] = useState<any>([]);
   const [loading, setLoading] = useState(false);
-  const [cursor, setCursor] = useState<ICursor | null>(null);
+  const [cursor, setCursor] = useState<ICursor>();
   const [reqRes, setReqRes] = useState<reqRes | null>(null);
   const [myBlogs, setMyblogs] = useState([]);
   const [isLiked, setIsLiked] = useState(false)
@@ -23,7 +24,10 @@ export function useBlogs() {
 
   const getBlogs = async () => {
     try {
-      setLoading(true);
+      if(cursor === null){
+        return
+      }
+      setLoading(true);  
       const res = await axios.get(
         `${BACKEND_URL}/blog/feed${
           cursor ? `?createdAt=${cursor.createdAt}&id=${cursor.id}` : ""
@@ -32,16 +36,14 @@ export function useBlogs() {
       );
 
       setBlogs(
-        cursor
-          ? (prevBlogs: any) => [...prevBlogs, ...res.data.blogs]
-          : res.data.blogs
+         (prevBlogs: any) => [...prevBlogs, ...res.data.blogs]
       );
       setCursor(res.data.nextCursor);
-      setReqRes({ msg: "fetched blogs", status: 200 });
+      setReqRes({ msg: "fetched blogs", status: 200, isOpen: true });
       setLoading(false);
     } catch (error) {
       console.error(error);
-      setReqRes({ msg: "can't fetch blogs", status: 500 });
+      setReqRes({ msg: "can't fetch blogs", status: 500, isOpen: true });
     }
   };
 
@@ -53,11 +55,11 @@ export function useBlogs() {
         { title, content },
         { withCredentials: true }
       );
-      setReqRes({ msg: "blog posted", status: res.status });
+      setReqRes({ msg: "blog posted", status: res.status, isOpen: true });
       setLoading(false);
     } catch (error) {
       console.error(error);
-      setReqRes({ msg: "can't post blog", status: 500 });
+      setReqRes({ msg: "can't post blog", status: 500, isOpen: true });
     }
   };
 
@@ -72,21 +74,21 @@ export function useBlogs() {
       );
       setCursor(res.data.nextCursor);
       setMyblogs(cursor ? (prev: never[]) => [...prev, ...res.data.blogs] as never[] : res.data.blogs);
-      setReqRes({ msg: "fetched blogs", status: res.status });
+      setReqRes({ msg: "fetched blogs", status: res.status, isOpen: true });
       setLoading(false);
     } catch (error) {
       console.error(error);
-      setReqRes({ msg: "can't fetch blogs", status: 500 });
+      setReqRes({ msg: "can't fetch blogs", status: 500, isOpen: true });
     }
   };
 
   const likeBlog = async (id: string) => {
     try {
       const res = await axios.post(`${BACKEND_URL}/blog/like/${id}`, {}, {withCredentials: true})
-      setReqRes({msg: res.data.isLiked ? "Liked!" : "unliked!", status: res.status})
+      setReqRes({msg: res.data.isLiked ? "Liked!" : "unliked!", status: res.status, isOpen: true})
       setIsLiked(prev => !prev)
     } catch (error) {
-      setReqRes({msg: "couldn't like!", status: 500})
+      setReqRes({msg: "couldn't like!", status: 500, isOpen: true})
       console.error(error)
     }
   }
@@ -128,20 +130,20 @@ export function useBlogs() {
     try {
       const res = await axios.post(`${BACKEND_URL}/blog/change/${id}`, {}, {withCredentials: true})
       setIsPublic(res.data.isPublic)
-      setReqRes({msg: "changed visibility", status: res.status})
+      setReqRes({msg: "changed visibility", status: res.status, isOpen: true})
     } catch (error) {
       console.error(error)
-      setReqRes({msg: "can't change visibility", status: 500})
+      setReqRes({msg: "can't change visibility", status: 500, isOpen: true})
     }
   }
 
   const deleteBlog = async (id: string) => {
     try {
       await axios.delete(`${BACKEND_URL}/blog/delete/${id}`,  {withCredentials: true})
-      setReqRes({msg: "deleted!!", status: 200})
+      setReqRes({msg: "deleted!!", status: 200, isOpen: true})
     } catch (error) {
       console.error(error)
-      setReqRes({msg: "can't delete", status: 500})
+      setReqRes({msg: "can't delete", status: 500, isOpen: true})
     }
   }
 

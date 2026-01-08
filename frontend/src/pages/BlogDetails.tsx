@@ -1,13 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import MainTheme from "../layouts/MainTheme";
 import { hexToRgba } from "../helpers/hextorgb";
-import { AiOutlineDislike, AiOutlineLike } from "react-icons/ai";
 import { useBlogs } from "../hooks/useBlog";
 import PopUp from "../components/PopUp";
 import { useEffect, useState } from "react";
 import BottomDialog from "../components/BottomDialog";
 import { MdDelete, MdEdit } from "react-icons/md";
-import { FcDislike, FcLike } from "react-icons/fc";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 
 function BlogDetails() {
@@ -17,7 +15,6 @@ function BlogDetails() {
     reqRes,
     setReqRes,
     isLiked,
-    loading,
     checkLike,
     countLikes,
     likes,
@@ -49,10 +46,11 @@ function BlogDetails() {
     await deleteBlog(blog.i.id);
     navigate("/myblogs");
   }
+
   return (
     <MainTheme>
 
-        <PopUp msg={reqRes?.msg} status={reqRes?.status} showBox={setReqRes} reqRes={reqRes} />
+<PopUp msg={reqRes?.msg ?? "something went wrong!"} status={reqRes?.status ?? 500} isOpen={reqRes?.isOpen} setIsOpen={setReqRes} />
 
       <div
         style={{ backgroundColor: hexToRgba(blog.bgColor, 0.1) }}
