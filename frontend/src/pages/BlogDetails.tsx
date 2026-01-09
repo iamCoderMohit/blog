@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import BottomDialog from "../components/BottomDialog";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 function BlogDetails() {
   const blog = useLocation().state;
@@ -47,6 +48,8 @@ function BlogDetails() {
     navigate("/myblogs");
   }
 
+  const [isMobile, setIsMobile] = useState(false)
+
   return (
     <MainTheme>
 
@@ -57,7 +60,7 @@ function BlogDetails() {
         className="h-full p-5 rounded-xl"
       >
         {isEdit && (
-          <div className="flex justify-between mb-5">
+          <div className="flex justify-between mb-5 items-center">
             <div className="flex items-center gap-5">
               <h1>Change visibility - </h1>
               <h1>currently {isPublic ? "public" : "private"}</h1>
@@ -77,9 +80,15 @@ function BlogDetails() {
               </select>
             </div>
 
-            <div className="flex gap-3">
+            <div className="md:hidden block text-xl cursor-pointer"
+            onClick={() => setIsMobile(prev => !prev)}
+            >
+              <BsThreeDotsVertical />
+            </div>
+
+            <div className={`flex md:block rounded-lg ${isMobile ? "flex-col gap-3 absolute right-15 backdrop-blur-2xl p-3" : "hidden"} gap-3`}>
               <div
-                className="bg-blue-600 rounded-md px-3 flex items-center cursor-pointer"
+                className="bg-blue-600 rounded-md px-3 py-1 flex items-center cursor-pointer"
                 onClick={handleDelete}
               >
                 <MdDelete />
@@ -91,7 +100,7 @@ function BlogDetails() {
                     state: { bgColor: blog.bgColor },
                   })
                 }
-                className="bg-blue-600 rounded-md px-3 flex items-center cursor-pointer"
+                className="bg-blue-600 rounded-md px-3 flex items-center cursor-pointer py-1"
               >
                 <MdEdit />
               </div>

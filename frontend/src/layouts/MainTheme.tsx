@@ -1,6 +1,6 @@
 function MainTheme({children}: {children: any}) {
   return (
-    <div className="w-1/2 mx-auto dark:text-white text-black">
+    <div className="md:w-1/2 mx-auto h-full dark:text-white text-black">
         {children}
     </div>
   )

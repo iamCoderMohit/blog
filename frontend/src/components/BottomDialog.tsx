@@ -21,7 +21,7 @@ function BottomDialog({
   return (
     <MainTheme>
       <div
-        className={`fixed h-fit rounded-2xl bottom-0 bg-gray-900/50 left-1/2 -translate-x-1/2 w-1/2 p-5 transform transition-transform duration-500 ease-out ${
+        className={`fixed h-fit rounded-2xl bottom-0 bg-gray-900/50 left-1/2 -translate-x-1/2 md:w-1/2 w-full p-5 transform  transition-transform duration-500 ease-out ${
           isOpen ? "translate-y-0" : "translate-y-full"
         }`}
       >

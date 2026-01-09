@@ -36,7 +36,7 @@ function Signup() {
 
   return (
     <div className="w-full flex justify-center items-center dark:text-white text-black">
-      <div className="w-1/4 flex flex-col dark:bg-gray-800 bg-gray-800/30 rounded-2xl p-5 mb-15 gap-5">
+      <div className="md:w-1/4 flex flex-col dark:bg-gray-800 bg-gray-800/30 rounded-2xl p-5 mb-15 gap-5">
         <h1 className="text-2xl font-bold text-center">Sign up</h1>
         <div>
           <input

@@ -1,11 +1,12 @@
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Inputs{
     isMobile?: boolean
+    setIsMobile?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function NavBtn({isMobile}: Inputs) {
+function NavBtn({isMobile, setIsMobile}: Inputs) {
   async function logout() {
     try {
       await axios.post(
@@ -17,22 +18,36 @@ function NavBtn({isMobile}: Inputs) {
       console.error(error);
     }
   }
+
+  const navigate = useNavigate()
+
+  function handleClick(path: string){
+    navigate(`${path}`)
+    setIsMobile(false)
+  }
   return (
-    <div className={`flex ${isMobile ? "flex-col fixed top-15 bg-zinc-900 w-full" : "flex-row"} gap-10 text-md`}>
+    <div className={`
+    w-full
+    flex gap-10 text-md
+    backdrop-blur-2xl py-5
+    ${isMobile
+      ? "absolute top-16 left-0 flex-col"
+      : "flex-row"}
+  `}>
       <button>
-        <Link to={"/"}>Home</Link>
+        <Link to={"/"} onClick={() => handleClick("/")}>Home</Link>
       </button>
       <button>
-        <Link to={"/feed"}>Feed</Link>
+        <Link to={"/feed"} onClick={() => handleClick("/feed")}>Feed</Link>
       </button>
       <button>
-        <Link to={"/myblogs"}>Blogs</Link>
+        <Link to={"/myblogs"} onClick={() => handleClick("/myblogs")}>Blogs</Link>
       </button>
       <button>
-        <Link to={"/signin"}>Sign in</Link>
+        <Link to={"/signin"} onClick={() => handleClick("/signin")}>Sign in</Link>
       </button>
       <button>
-        <Link to={"/signup"}>Sign up</Link>
+        <Link to={"/signup"} onClick={() => handleClick("/signup")}>Sign up</Link>
       </button>
       <button onClick={logout} className="cursor-pointer">
         Logout

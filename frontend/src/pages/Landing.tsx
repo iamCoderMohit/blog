@@ -5,7 +5,7 @@ function Landing() {
           <h1 className="text-center">Found something interesting</h1>
           <h1 className="text-center">tell the community!!</h1>
         </div>
-        <h1 className="text-gray-400 mt-10 text-xl">OpenBlog is a platform where you can write and find about things you see in internet but not very often</h1>
+        <h1 className="text-gray-400 mt-10 text-xl text-center">OpenBlog is a platform where you can write and find about things you see in internet but not very often</h1>
     </div>
   )
 }

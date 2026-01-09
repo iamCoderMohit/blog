@@ -6,6 +6,7 @@ import { useTheme } from "../context/ThemeContext";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
 import NavBtn from "./NavBtn";
+import { ImCross } from "react-icons/im";
 
 function Navbar() {
 
@@ -13,8 +14,6 @@ function Navbar() {
   const { toggleDark, toggleLight, theme } = useTheme();
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false)
-
-  console.log(isMobile)
 
   return (
     <div className="flex justify-around dark:text-white text-black items-center p-5">
@@ -27,10 +26,10 @@ function Navbar() {
         </div>
 
         {isMobile && 
-        <div>
-          <NavBtn isMobile={isMobile} />
-        </div>
-        }
+
+          <NavBtn isMobile={isMobile} setIsMobile={setIsMobile} />
+
+         }
 
         <div className="flex gap-8">
           <button onClick={toggleLight} className="text-2xl cursor-pointer">
@@ -45,7 +44,8 @@ function Navbar() {
       <div className="md:hidden text-xl cursor-pointer"
       onClick={() => setIsMobile(prev => !prev)}
       >
-          <GiHamburgerMenu />
+          
+          {isMobile ? <div className="text-sm"><ImCross /></div> : <GiHamburgerMenu /> }
       </div>
     </div>
   );
