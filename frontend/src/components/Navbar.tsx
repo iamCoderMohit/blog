@@ -1,29 +1,54 @@
-import axios from "axios"
-import { Link } from "react-router-dom"
+import axios from "axios";
+import { FaMoon, FaRegMoon } from "react-icons/fa";
+import { IoSunny, IoSunnyOutline } from "react-icons/io5";
+import { Link, useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { useState } from "react";
+import NavBtn from "./NavBtn";
 
 function Navbar() {
-  async function logout() {
-    try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {}, {withCredentials: true})
-    } catch (error) {
-      console.error(error)
-    }
-  }
+
+
+  const { toggleDark, toggleLight, theme } = useTheme();
+  const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(false)
+
+  console.log(isMobile)
+
   return (
-    <div className="flex justify-around text-white items-center p-5">
-      <div>
+    <div className="flex justify-around dark:text-white text-black items-center p-5">
+      <div className="cursor-pointer" onClick={() => navigate("/")}>
         <h1 className="text-2xl font-bold">OpenBlog</h1>
       </div>
-      <div className="flex gap-10 text-md">
-        <button><Link to={"/"}>Home</Link></button>
-        <button><Link to={"/feed"}>Feed</Link></button>
-        <button><Link to={"/myblogs"}>Blogs</Link></button>
-        <button><Link to={"/signin"}>Sign in</Link></button>
-        <button><Link to={"/signup"}>Sign up</Link></button>
-        <button onClick={logout} className="cursor-pointer">Logout</button>
+
+        <div className="md:block hidden">
+          <NavBtn />
+        </div>
+
+        {isMobile && 
+        <div>
+          <NavBtn isMobile={isMobile} />
+        </div>
+        }
+
+        <div className="flex gap-8">
+          <button onClick={toggleLight} className="text-2xl cursor-pointer">
+            {" "}
+            {theme === "light" ? <IoSunny /> : <IoSunnyOutline />}
+          </button>
+          <button onClick={toggleDark} className="cursor-pointer text-lg">
+            {theme === "dark" ? <FaMoon /> : <FaRegMoon />}{" "}
+          </button>
+        </div>
+
+      <div className="md:hidden text-xl cursor-pointer"
+      onClick={() => setIsMobile(prev => !prev)}
+      >
+          <GiHamburgerMenu />
       </div>
     </div>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;

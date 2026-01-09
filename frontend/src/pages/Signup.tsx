@@ -35,12 +35,12 @@ function Signup() {
   }, [username]);
 
   return (
-    <div className="w-full flex justify-center items-center">
-      <div className="w-1/4 flex flex-col bg-gray-800 rounded-2xl p-5 mb-15 gap-5">
-        <h1 className="text-white text-2xl font-bold text-center">Sign up</h1>
+    <div className="w-full flex justify-center items-center dark:text-white text-black">
+      <div className="w-1/4 flex flex-col dark:bg-gray-800 bg-gray-800/30 rounded-2xl p-5 mb-15 gap-5">
+        <h1 className="text-2xl font-bold text-center">Sign up</h1>
         <div>
           <input
-            className="border w-full border-white rounded-xl pl-4 text-white p-3 text-lg"
+            className="border w-full border-white rounded-xl pl-4 p-3 text-lg"
             type="text"
             placeholder="username"
             onChange={(e) => setUsername(e.target.value)}
@@ -48,13 +48,13 @@ function Signup() {
           <div>{usernameErrMsg ? <h1 className="text-green-500">{usernameErrMsg}</h1> : null }</div>
         </div>
         <input
-          className="border border-white rounded-xl pl-4 text-white p-3 text-lg"
+          className="border border-white rounded-xl pl-4  p-3 text-lg"
           type="text"
           placeholder="email"
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
-          className="border border-white rounded-xl pl-4 text-white p-3 text-lg"
+          className="border border-white rounded-xl pl-4 p-3 text-lg"
           type="text"
           placeholder="password"
           onChange={(e) => setPassword(e.target.value)}

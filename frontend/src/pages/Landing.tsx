@@ -1,7 +1,7 @@
 function Landing() {
   return (
     <div className="flex-1 min-h-full flex justify-center items-center flex-col">
-        <div className="text-white text-6xl font-bold">
+        <div className="dark:text-white text-black text-6xl font-bold">
           <h1 className="text-center">Found something interesting</h1>
           <h1 className="text-center">tell the community!!</h1>
         </div>
