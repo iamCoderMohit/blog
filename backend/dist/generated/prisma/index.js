@@ -115,6 +115,16 @@ exports.Prisma.LikeScalarFieldEnum = {
   postId: 'postId'
 };
 
+exports.Prisma.TagScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.BlogTagScalarFieldEnum = {
+  blogId: 'blogId',
+  tagId: 'tagId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -129,7 +139,9 @@ exports.Prisma.QueryMode = {
 exports.Prisma.ModelName = {
   User: 'User',
   Blog: 'Blog',
-  Like: 'Like'
+  Like: 'Like',
+  Tag: 'Tag',
+  BlogTag: 'BlogTag'
 };
 /**
  * Create the Client
@@ -139,10 +151,10 @@ const config = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../dist/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  username  String   @unique\n  email     String   @unique\n  password  String\n  createdAt DateTime @default(now())\n\n  blogs Blog[]\n  likes Like[]\n}\n\nmodel Blog {\n  id        String   @id @default(uuid())\n  title     String\n  content   String\n  author    User     @relation(fields: [authorId], references: [id])\n  authorId  String\n  isPublic  Boolean  @default(false)\n  createdAt DateTime @default(now())\n  likes     Like[]\n\n  @@unique([createdAt, id])\n}\n\nmodel Like {\n  userId String\n  postId String\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n  post Blog @relation(fields: [postId], references: [id], onDelete: Cascade)\n\n  @@id([userId, postId])\n}\n"
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../dist/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  username  String   @unique\n  email     String   @unique\n  password  String\n  createdAt DateTime @default(now())\n\n  blogs Blog[]\n  likes Like[]\n}\n\nmodel Blog {\n  id        String   @id @default(uuid())\n  title     String\n  content   String\n  author    User     @relation(fields: [authorId], references: [id])\n  authorId  String\n  isPublic  Boolean  @default(false)\n  createdAt DateTime @default(now())\n  likes     Like[]\n\n  tags BlogTag[]\n\n  @@unique([createdAt, id])\n}\n\nmodel Like {\n  userId String\n  postId String\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n  post Blog @relation(fields: [postId], references: [id], onDelete: Cascade)\n\n  @@id([userId, postId])\n}\n\nmodel Tag {\n  id    String    @id @default(uuid())\n  name  String    @unique\n  blogs BlogTag[]\n}\n\nmodel BlogTag {\n  blogId String\n  tagId  String\n\n  blog Blog @relation(fields: [blogId], references: [id])\n  tag  Tag  @relation(fields: [tagId], references: [id])\n\n  @@id([blogId, tagId])\n}\n"
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"blogs\",\"kind\":\"object\",\"type\":\"Blog\",\"relationName\":\"BlogToUser\"},{\"name\":\"likes\",\"kind\":\"object\",\"type\":\"Like\",\"relationName\":\"LikeToUser\"}],\"dbName\":null},\"Blog\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"author\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"BlogToUser\"},{\"name\":\"authorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isPublic\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"likes\",\"kind\":\"object\",\"type\":\"Like\",\"relationName\":\"BlogToLike\"}],\"dbName\":null},\"Like\":{\"fields\":[{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"postId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"LikeToUser\"},{\"name\":\"post\",\"kind\":\"object\",\"type\":\"Blog\",\"relationName\":\"BlogToLike\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"blogs\",\"kind\":\"object\",\"type\":\"Blog\",\"relationName\":\"BlogToUser\"},{\"name\":\"likes\",\"kind\":\"object\",\"type\":\"Like\",\"relationName\":\"LikeToUser\"}],\"dbName\":null},\"Blog\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"author\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"BlogToUser\"},{\"name\":\"authorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isPublic\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"likes\",\"kind\":\"object\",\"type\":\"Like\",\"relationName\":\"BlogToLike\"},{\"name\":\"tags\",\"kind\":\"object\",\"type\":\"BlogTag\",\"relationName\":\"BlogToBlogTag\"}],\"dbName\":null},\"Like\":{\"fields\":[{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"postId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"LikeToUser\"},{\"name\":\"post\",\"kind\":\"object\",\"type\":\"Blog\",\"relationName\":\"BlogToLike\"}],\"dbName\":null},\"Tag\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"blogs\",\"kind\":\"object\",\"type\":\"BlogTag\",\"relationName\":\"BlogTagToTag\"}],\"dbName\":null},\"BlogTag\":{\"fields\":[{\"name\":\"blogId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tagId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"blog\",\"kind\":\"object\",\"type\":\"Blog\",\"relationName\":\"BlogToBlogTag\"},{\"name\":\"tag\",\"kind\":\"object\",\"type\":\"Tag\",\"relationName\":\"BlogTagToTag\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.compilerWasm = {
       getRuntime: async () => require('./query_compiler_bg.js'),

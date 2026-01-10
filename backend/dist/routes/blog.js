@@ -6,7 +6,7 @@ blogRouter.use(verifyUser);
 //create a blog
 blogRouter.post("/new", async (req, res) => {
     try {
-        const { title, content } = req.body;
+        const { title, content, tags } = req.body;
         if (!title || !content) {
             return res.status(409).json({
                 msg: "provide title and content!!",
@@ -19,6 +19,24 @@ blogRouter.post("/new", async (req, res) => {
                 authorId: req.user.id,
             },
         });
+        for (const tagName of tags) {
+            let tag = await prisma.tag.findUnique({
+                where: { name: tagName }
+            });
+            if (!tag) {
+                tag = await prisma.tag.create({
+                    data: {
+                        name: tagName
+                    }
+                });
+            }
+            await prisma.blogTag.create({
+                data: {
+                    blogId: blog.id,
+                    tagId: tag.id
+                }
+            });
+        }
         res.json({
             blog: {
                 title: blog.title,

@@ -29,6 +29,8 @@ model Blog {
 
   @@unique([createdAt, id])
   likes Like[]
+
+  tags BlogTag[]
 }
 
 model Like {
@@ -39,4 +41,20 @@ model Like {
   post Blog @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@id([userId, postId])
+}
+
+model Tag {
+  id String @id @default(uuid())
+  name String @unique
+  blogs BlogTag[]
+}
+
+model BlogTag {
+  blogId String
+  tagId String
+
+  blog Blog @relation(fields: [blogId], references: [id])
+  tag Tag @relation(fields: [tagId], references: [id])
+
+  @@id([blogId, tagId])
 }

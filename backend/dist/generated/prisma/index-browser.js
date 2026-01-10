@@ -142,6 +142,16 @@ exports.Prisma.LikeScalarFieldEnum = {
   postId: 'postId'
 };
 
+exports.Prisma.TagScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.BlogTagScalarFieldEnum = {
+  blogId: 'blogId',
+  tagId: 'tagId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -156,7 +166,9 @@ exports.Prisma.QueryMode = {
 exports.Prisma.ModelName = {
   User: 'User',
   Blog: 'Blog',
-  Like: 'Like'
+  Like: 'Like',
+  Tag: 'Tag',
+  BlogTag: 'BlogTag'
 };
 
 /**
