@@ -48,16 +48,20 @@ function BlogDetails() {
     navigate("/myblogs");
   }
 
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(false);
 
   return (
     <MainTheme>
-
-<PopUp msg={reqRes?.msg ?? "something went wrong!"} status={reqRes?.status ?? 500} isOpen={reqRes?.isOpen} setIsOpen={setReqRes} />
+      <PopUp
+        msg={reqRes?.msg ?? "something went wrong!"}
+        status={reqRes?.status ?? 500}
+        isOpen={reqRes?.isOpen}
+        setIsOpen={setReqRes}
+      />
 
       <div
         style={{ backgroundColor: hexToRgba(blog.bgColor, 0.1) }}
-        className="h-full p-5 rounded-xl"
+        className="p-5 rounded-xl"
       >
         {isEdit && (
           <div className="flex justify-between mb-5 items-center">
@@ -80,15 +84,31 @@ function BlogDetails() {
               </select>
             </div>
 
-            <div className="md:hidden block text-xl cursor-pointer"
-            onClick={() => setIsMobile(prev => !prev)}
+            <div
+              className="md:hidden block text-xl cursor-pointer"
+              onClick={() => setIsMobile((prev) => !prev)}
             >
               <BsThreeDotsVertical />
             </div>
 
-            <div className={`flex md:block rounded-lg ${isMobile ? "flex-col gap-3 absolute right-15 backdrop-blur-2xl p-3" : "hidden"} gap-3`}>
+            <div
+                className={`
+                  /* Base (mobile) */
+                  absolute right-15 top-14
+                  flex flex-col gap-3 rounded-lg
+                  backdrop-blur-2xl p-3
+                  opacity-0 -translate-y-2 
+                  transition-all duration-300 ease-out
+              
+                  /* Desktop override */
+                  md:static md:flex-row md:opacity-100 md:translate-y-0 md:pointer-events-auto
+              
+                  /* Mobile open */
+                  ${isMobile ? "opacity-100 translate-y-0 pointer-events-auto" : ""}
+                `}
+            >
               <div
-                className="bg-blue-600 rounded-md px-3 py-1 flex items-center cursor-pointer"
+                className="bg-blue-600 z-10 rounded-md px-3 py-1 flex items-center cursor-pointer"
                 onClick={handleDelete}
               >
                 <MdDelete />

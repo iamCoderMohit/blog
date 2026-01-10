@@ -31,7 +31,7 @@ function NavBtn({isMobile, setIsMobile}: Inputs) {
     flex gap-10 text-md
     backdrop-blur-2xl py-5
     ${isMobile
-      ? "absolute top-16 left-0 flex-col"
+      ? "absolute top-16 left-0 flex-col z-5"
       : "flex-row"}
   `}>
       <button>
