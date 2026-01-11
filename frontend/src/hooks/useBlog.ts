@@ -49,12 +49,12 @@ export function useBlogs() {
     }
   };
 
-  const postBlog = async (title: string, content: string) => {
+  const postBlog = async (title: string, content: string, tags: String[]) => {
     try {
       setLoading(true);
       const res = await axios.post(
         `${BACKEND_URL}/blog/new`,
-        { title, content },
+        { title, content, tags },
         { withCredentials: true }
       );
       setReqRes({ msg: "blog posted", status: res.status, isOpen: true });

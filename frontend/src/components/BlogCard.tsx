@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Inputs } from "../commonInputs/interface";
 import { hexToRgba } from "../helpers/hextorgb";
+import Tag from "./Tag";
 
 function BlogCard({
   i,
@@ -46,7 +47,14 @@ function BlogCard({
         <p>{i.content}</p>
       </div>
 
-      <span>{formatted}</span>
+      <div className="flex items-center justify-between mt-2 flex-wrap">
+        <div className="flex gap-3 flex-wrap">
+          {i.tags.map((tag: any) => (
+            <Tag name={tag.name} />
+          ))}
+        </div>
+        <span>{formatted}</span>
+      </div>
     </div>
   );
 }

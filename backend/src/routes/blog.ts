@@ -1,6 +1,7 @@
 import express from "express";
 import prisma from "../config/prisma.js";
 import { verifyUser } from "../middlewares/verifyUser.js";
+import { flatArr } from "../helpers/flatArr.js";
 
 const blogRouter = express.Router();
 blogRouter.use(verifyUser);
@@ -251,6 +252,16 @@ blogRouter.get("/myblogs", async (req, res) => {
             select: {
                 username: true
             }
+        },
+        tags: {
+          select: {
+            tag: {
+              select: {
+                name: true,
+                id: true
+              }
+            }
+          }
         }
       }
     },
@@ -261,8 +272,18 @@ const nextCursor = blogs.length > 0 ? {
     id: blogs[blogs.length - 1].id
 } : null
 
+  // const formattedBlogs = blogs.map((blog) => ({
+  //   ...blog,
+  //   tags: blog.tags.map(t => ({
+  //     id: t.tag.id,
+  //     name: t.tag.name
+  //   }))
+  // }))
+
+  const formattedBlogs = flatArr(blogs)
+
     res.json({
-      blogs,
+      blogs: formattedBlogs,
       nextCursor
     });
   } catch (error) {
@@ -308,6 +329,16 @@ blogRouter.get("/feed", async (req, res) => {
             username: true,
           },
         },
+        tags: {
+          select: {
+            tag: {
+              select: {
+                name: true,
+                id: true
+              }
+            }
+          }
+        }
       },
     });
 
@@ -316,8 +347,16 @@ blogRouter.get("/feed", async (req, res) => {
         id: blogs[blogs.length - 1].id
     } : null
 
+    const formattedBlogs = blogs.map((blog) => ({
+      ...blog,
+      tags: blog.tags.map(t => ({
+        id: t.tag.id,
+        name: t.tag.name
+      }))
+    }))
+
     res.json({
-      blogs,
+      blogs: formattedBlogs,
       nextCursor
     });
   } catch (error) {

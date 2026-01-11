@@ -6,6 +6,7 @@ import PopUp from "../components/PopUp";
 import { useNavigate } from "react-router-dom";
 import { handleKeyDown } from "../helpers/handleKey";
 import { MdDelete } from "react-icons/md";
+import Tag from "../components/Tag";
 
 function NewBlog() {
   const [title, setTitle] = useState("");
@@ -50,15 +51,15 @@ function NewBlog() {
   );
   const { postBlog, loading, reqRes, setReqRes } = useBlogs();
   const navigate = useNavigate();
+  const [tags, setTags] = useState<String[]>([]);
 
   async function handleClick() {
-    await postBlog(title, content);
+    await postBlog(title, content, tags);
     setTitle("");
     setContent("");
     navigate("/myblogs");
   }
 
-  const [tags, setTags] = useState<String[]>([]);
 
   return (
     <MainTheme>
@@ -101,23 +102,7 @@ function NewBlog() {
 
         <div className="mt-5 flex flex-wrap gap-4">
           {tags.map((i: any, index: number) => (
-            <div className="flex gap-4 items-center bg-gray-600/30 p-2 px-5 rounded-full group           transition-all duration-200 ease-in-out">
-              <span className="">#{i}</span>
-              <div
-                className="cursor-pointer
-          max-w-0
-          opacity-0
-          transition-all duration-200 ease-in-out
-          group-hover:max-w-6
-          group-hover:opacity-100
-"
-              onClick={() => {
-                setTags(prev => prev.filter((_, i) => i !== index))
-              }}
-              >
-                <MdDelete />
-              </div>
-            </div>
+            <Tag setTags={setTags} name={i} index={index} />
           ))}
         </div>
 

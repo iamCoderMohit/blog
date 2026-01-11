@@ -24,9 +24,11 @@ function MyBlogs() {
       ) : null}
       <h1 className="font-bold text-2xl mb-5">My Blogs</h1>
       {loading ? (
-        <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2"><LoaderOne /></div>
-      ) : (
-        myBlogs.length > 0 ? <div className="flex flex-col gap-5">
+        <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2">
+          <LoaderOne />
+        </div>
+      ) : myBlogs.length > 0 ? (
+        <div className="flex flex-col gap-5">
           {myBlogs.map((i: Inputs) => (
             <BlogCard i={i} bgColor="#ff00ff" isEdit={true} />
           ))}
@@ -36,7 +38,9 @@ function MyBlogs() {
           >
             Load more
           </button>
-        </div> : <h1>nothing to see here</h1>
+        </div>
+      ) : (
+        <h1>nothing to see here</h1>
       )}
     </MainTheme>
   );

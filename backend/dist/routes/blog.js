@@ -226,6 +226,16 @@ blogRouter.get("/myblogs", async (req, res) => {
                     select: {
                         username: true
                     }
+                },
+                tags: {
+                    select: {
+                        tag: {
+                            select: {
+                                name: true,
+                                id: true
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -233,8 +243,15 @@ blogRouter.get("/myblogs", async (req, res) => {
             createdAt: blogs[blogs.length - 1].createdAt,
             id: blogs[blogs.length - 1].id
         } : null;
+        const formattedBlogs = blogs.map((blog) => ({
+            ...blog,
+            tags: blog.tags.map(t => ({
+                id: t.tag.id,
+                name: t.tag.name
+            }))
+        }));
         res.json({
-            blogs,
+            blogs: formattedBlogs,
             nextCursor
         });
     }
@@ -273,14 +290,31 @@ blogRouter.get("/feed", async (req, res) => {
                         username: true,
                     },
                 },
+                tags: {
+                    select: {
+                        tag: {
+                            select: {
+                                name: true,
+                                id: true
+                            }
+                        }
+                    }
+                }
             },
         });
         const nextCursor = blogs.length > 0 ? {
             createdAt: blogs[blogs.length - 1].createdAt,
             id: blogs[blogs.length - 1].id
         } : null;
+        const formattedBlogs = blogs.map((blog) => ({
+            ...blog,
+            tags: blog.tags.map(t => ({
+                id: t.tag.id,
+                name: t.tag.name
+            }))
+        }));
         res.json({
-            blogs,
+            blogs: formattedBlogs,
             nextCursor
         });
     }

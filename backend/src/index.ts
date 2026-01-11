@@ -3,6 +3,7 @@ import authRouter from './routes/auth.js'
 import blogRouter from './routes/blog.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import tagRouter from './routes/tag.js'
 
 const app = express()
 app.use(express.json())
@@ -14,5 +15,6 @@ app.use(cors({
 
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/blog", blogRouter)
+app.use("/api/v1/tag", tagRouter)
 
 export default app
