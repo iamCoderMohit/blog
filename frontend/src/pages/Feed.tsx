@@ -5,10 +5,10 @@ import NewBlogMock from "../components/NewBlogMock";
 import MainTheme from "../layouts/MainTheme";
 import type { Inputs } from "../commonInputs/interface";
 import { LoaderOne } from "../components/Loader";
+import { getRandomColor } from "../helpers/randomColor";
 
 function Feed() {
   const { getBlogs, blogs, loading, cursor, hasMore } = useBlogs();
-  const bgOpt = ["#fcba03", "#16ab25", "#16ab25", "#182ba8", "#b0259b"];
 
   useEffect(() => {
     async function fetch() {
@@ -62,7 +62,7 @@ function Feed() {
         {blogs.map((i: Inputs) => (
           <BlogCard
             i={i}
-            bgColor={bgOpt[Math.floor(Math.random() * bgOpt.length)]}
+            bgColor={getRandomColor()}
           />
         ))}
         <div ref={loadMoreRef}></div>

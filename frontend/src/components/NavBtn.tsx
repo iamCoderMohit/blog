@@ -49,6 +49,9 @@ function NavBtn({isMobile, setIsMobile}: Inputs) {
       <button>
         <Link to={"/signup"} onClick={() => handleClick("/signup")}>Sign up</Link>
       </button>
+      <button>
+        <Link to={"/search"} onClick={() => handleClick("/search")}>Search</Link>
+      </button>
       <button onClick={logout} className="cursor-pointer">
         Logout
       </button>

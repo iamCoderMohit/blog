@@ -1,6 +1,7 @@
 import express from "express";
 import prisma from "../config/prisma.js";
 import { verifyUser } from "../middlewares/verifyUser.js";
+import { flatArr } from "../helpers/flatArr.js";
 const blogRouter = express.Router();
 blogRouter.use(verifyUser);
 //create a blog
@@ -243,13 +244,7 @@ blogRouter.get("/myblogs", async (req, res) => {
             createdAt: blogs[blogs.length - 1].createdAt,
             id: blogs[blogs.length - 1].id
         } : null;
-        const formattedBlogs = blogs.map((blog) => ({
-            ...blog,
-            tags: blog.tags.map(t => ({
-                id: t.tag.id,
-                name: t.tag.name
-            }))
-        }));
+        const formattedBlogs = flatArr({ blogs: blogs });
         res.json({
             blogs: formattedBlogs,
             nextCursor
@@ -306,13 +301,7 @@ blogRouter.get("/feed", async (req, res) => {
             createdAt: blogs[blogs.length - 1].createdAt,
             id: blogs[blogs.length - 1].id
         } : null;
-        const formattedBlogs = blogs.map((blog) => ({
-            ...blog,
-            tags: blog.tags.map(t => ({
-                id: t.tag.id,
-                name: t.tag.name
-            }))
-        }));
+        const formattedBlogs = flatArr({ blogs: blogs });
         res.json({
             blogs: formattedBlogs,
             nextCursor

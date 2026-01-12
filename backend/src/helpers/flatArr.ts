@@ -13,9 +13,9 @@ interface Input {
 }
 
 export const flatArr = ({ blogs }: Input) => {
-  const formattedBlogs = blogs.map((blog) => ({
+  const formattedBlogs = blogs.map((blog: { tags: { tag: { id: string; name: string; }; }[]; }) => ({
     ...blog,
-    tags: blog.map((t: any) => ({
+    tags: blog.tags.map((t: { tag: { id: string; name: string; }; }) => ({
       id: t.tag.id,
       name: t.tag.name,
     })),

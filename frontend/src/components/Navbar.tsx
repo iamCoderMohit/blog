@@ -1,7 +1,6 @@
-import axios from "axios";
 import { FaMoon, FaRegMoon } from "react-icons/fa";
 import { IoSunny, IoSunnyOutline } from "react-icons/io5";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";

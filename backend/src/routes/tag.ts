@@ -8,7 +8,6 @@ tagRouter.use(verifyUser)
 tagRouter.get("/find", async (req, res) => {
   try {
     const { tagName } = req.query;
-    console.log(tagName)
 
     if (!tagName) {
       return res.status(404).json({
@@ -18,6 +17,7 @@ tagRouter.get("/find", async (req, res) => {
 
     const blogs = await prisma.blog.findMany({
       where: {
+        isPublic: true,
         tags: {
           some: {
             tag: {
@@ -26,6 +26,13 @@ tagRouter.get("/find", async (req, res) => {
           },
         },
       },
+      include: {
+        author: {
+          select: {
+            username: true
+          }
+        }
+      }
     });
 
     res.json({

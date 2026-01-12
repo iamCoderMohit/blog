@@ -5,6 +5,7 @@ import { useBlogs } from "../hooks/useBlog";
 import MainTheme from "../layouts/MainTheme";
 import type { Inputs } from "../commonInputs/interface";
 import { LoaderOne } from "../components/Loader";
+import { getRandomColor } from "../helpers/randomColor";
 
 function MyBlogs() {
   const { myBlogs, loading, reqRes, setReqRes, getMyBlogs } = useBlogs();
@@ -30,7 +31,7 @@ function MyBlogs() {
       ) : myBlogs.length > 0 ? (
         <div className="flex flex-col gap-5">
           {myBlogs.map((i: Inputs) => (
-            <BlogCard i={i} bgColor="#ff00ff" isEdit={true} />
+            <BlogCard i={i} bgColor={getRandomColor()} isEdit={true} />
           ))}
           <button
             className="bg-blue-700 px-4 cursor-pointer rounded-md mt-5"

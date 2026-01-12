@@ -272,15 +272,7 @@ const nextCursor = blogs.length > 0 ? {
     id: blogs[blogs.length - 1].id
 } : null
 
-  // const formattedBlogs = blogs.map((blog) => ({
-  //   ...blog,
-  //   tags: blog.tags.map(t => ({
-  //     id: t.tag.id,
-  //     name: t.tag.name
-  //   }))
-  // }))
-
-  const formattedBlogs = flatArr(blogs)
+  const formattedBlogs = flatArr({blogs: blogs})
 
     res.json({
       blogs: formattedBlogs,
@@ -347,14 +339,7 @@ blogRouter.get("/feed", async (req, res) => {
         id: blogs[blogs.length - 1].id
     } : null
 
-    const formattedBlogs = blogs.map((blog) => ({
-      ...blog,
-      tags: blog.tags.map(t => ({
-        id: t.tag.id,
-        name: t.tag.name
-      }))
-    }))
-
+      const formattedBlogs = flatArr({blogs: blogs})
     res.json({
       blogs: formattedBlogs,
       nextCursor

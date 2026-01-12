@@ -149,6 +149,18 @@ export function useBlogs() {
     }
   }
 
+  const [tagBlogs, setTagBlogs] = useState([])
+  const tagBlog = async (tagname: string) => {
+    try {
+      setLoading(true)
+      const res = await axios.get(`${BACKEND_URL}/tag/find?tagName=${tagname}`, {withCredentials: true})
+      setTagBlogs(res.data.blogs)
+      setLoading(false)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return {
     getBlogs,
     hasMore,
@@ -168,6 +180,8 @@ export function useBlogs() {
     changeVisibility,
     checkVisibility,
     isPublic,
-    deleteBlog
+    deleteBlog,
+    tagBlog,
+    tagBlogs
   };
 }

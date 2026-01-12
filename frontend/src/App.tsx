@@ -8,6 +8,8 @@ import NewBlog from "./pages/NewBlog";
 import MyBlogs from "./pages/MyBlogs";
 import BlogDetails from "./pages/BlogDetails";
 import EditBlog from "./pages/EditBlog";
+import Tag from "./pages/Tag";
+import Search from "./pages/Search";
 
 export default function App() {
   return (
@@ -21,6 +23,8 @@ export default function App() {
           <Route path="/myblogs" element={<MyBlogs />} />
           <Route path="/blog/:id" element={<BlogDetails />} />
           <Route path="/blog/edit/:id" element={<EditBlog />} />
+          <Route path="/tag/:tagname" element={<Tag />} />
+          <Route path="/search" element={<Search />} />
         </Route>
       </Routes>
   );
