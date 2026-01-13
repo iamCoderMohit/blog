@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import type { Inputs } from "../commonInputs/interface";
 import { hexToRgba } from "../helpers/hextorgb";
 import Tag from "./Tag";
+import { useAuth } from "../context/AuthContext";
+import AuthComp from "./AuthComp";
+import Overlay from "./Overlay";
 
 function BlogCard({
   i,
@@ -23,12 +26,28 @@ function BlogCard({
   const navigate = useNavigate();
 
   const [hover, setHover] = useState(false);
+  const {user} = useAuth()
+  const [showAuth, setShowAuth] = useState(false)
+
+  if(showAuth){
+    return (
+      // <Overlay>
+        <AuthComp msg="Sign in to read this blog!!" setShowAuth={setShowAuth} showAuth={showAuth} />
+      // </Overlay> 
+    )
+  }
 
   return (
     <div
       className={`cursor-pointer rounded-md p-3`}
       style={{ backgroundColor: hexToRgba(bgColor, hover ? 0.2 : 0.1) }}
-      onClick={() => navigate(`/blog/${i.id}`, { state: { i, bgColor, isEdit } })}
+      onClick={() => {
+        if(!user){
+          setShowAuth(true)
+        }else{
+          navigate(`/blog/${i.id}`, { state: { i, bgColor, isEdit } })
+        }
+      }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >

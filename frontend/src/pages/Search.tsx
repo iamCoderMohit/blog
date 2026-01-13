@@ -5,10 +5,13 @@ import { useEffect, useState } from "react"
 import { LoaderOne } from "../components/Loader"
 import BlogCard from "../components/BlogCard"
 import { getRandomColor } from "../helpers/randomColor"
+import { useAuth } from "../context/AuthContext"
+import AuthComp from "../components/AuthComp"
 
 function Search() {
     const {loading, searchQuery, searchRes} = useSearch()
     const [query, setQuery] = useState("")
+    const {user} = useAuth()
 
     useEffect(() => {
         if(!query) return 
@@ -21,6 +24,12 @@ function Search() {
             clearTimeout(debouncedTimer)
         }
     }, [query])
+
+    if(!user){
+        return (
+            <AuthComp msg="Sign in to search what you want!!" />
+        )
+    }
 
   return (
     <MainTheme>

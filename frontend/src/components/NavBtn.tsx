@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 interface Inputs{
     isMobile?: boolean
@@ -7,6 +8,7 @@ interface Inputs{
 }
 
 function NavBtn({isMobile, setIsMobile}: Inputs) {
+  const {refetchUser} = useAuth()
   async function logout() {
     try {
       await axios.post(
@@ -14,6 +16,7 @@ function NavBtn({isMobile, setIsMobile}: Inputs) {
         {},
         { withCredentials: true }
       );
+      refetchUser()
     } catch (error) {
       console.error(error);
     }

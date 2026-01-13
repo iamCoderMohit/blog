@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 function Signin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const {refetchUser} = useAuth()
 
   async function handleSignin(username: string, password: string) {
     try {
@@ -12,6 +14,8 @@ function Signin() {
         { username, password },
         { withCredentials: true }
       );
+
+      refetchUser()
     } catch (error) {
       console.log(error);
     }

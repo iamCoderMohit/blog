@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useUsername } from "../hooks/useUsername";
+import { useAuth } from "../context/AuthContext";
 
 function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const {refetchUser} = useAuth()
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -15,6 +17,7 @@ function Signup() {
         `${BACKEND_URL}/auth/signup`,
         { username, password, email },
       );
+      refetchUser()
     } catch (error) {
       console.log(error);
     }

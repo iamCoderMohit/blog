@@ -6,9 +6,12 @@ import MainTheme from "../layouts/MainTheme";
 import type { Inputs } from "../commonInputs/interface";
 import { LoaderOne } from "../components/Loader";
 import { getRandomColor } from "../helpers/randomColor";
+import { useAuth } from "../context/AuthContext";
+import AuthComp from "../components/AuthComp";
 
 function MyBlogs() {
   const { myBlogs, loading, reqRes, setReqRes, getMyBlogs } = useBlogs();
+  const {user} = useAuth()
 
   useEffect(() => {
     async function fetch() {
@@ -17,6 +20,12 @@ function MyBlogs() {
 
     fetch();
   }, []);
+
+  if(!user){
+    return (
+      <AuthComp msg="Sign in to create your blogs!!" />
+    )
+  }
 
   return (
     <MainTheme>

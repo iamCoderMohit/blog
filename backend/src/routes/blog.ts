@@ -4,6 +4,67 @@ import { verifyUser } from "../middlewares/verifyUser.js";
 import { flatArr } from "../helpers/flatArr.js";
 
 const blogRouter = express.Router();
+
+//get blogs (all)
+blogRouter.get("/feed", async (req, res) => {
+  try {
+    const { createdAt, id } = req.query;
+
+    const cursorVal = {
+        createdAt,
+        id
+    }
+
+    const blogs = await prisma.blog.findMany({
+      take: 5,
+      skip: createdAt && id ? 1 : 0,
+      cursor: createdAt && id
+        ? {
+            createdAt_id: {
+              createdAt: cursorVal.createdAt as string,
+              id: cursorVal.id as string,
+            },
+          }
+        : undefined,
+      where: {
+        isPublic: true,
+      },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      include: {
+        author: {
+          select: {
+            username: true,
+          },
+        },
+        tags: {
+          select: {
+            tag: {
+              select: {
+                name: true,
+                id: true
+              }
+            }
+          }
+        }
+      },
+    });
+
+    const nextCursor = blogs.length > 0 ? {
+        createdAt: blogs[blogs.length - 1].createdAt,
+        id: blogs[blogs.length - 1].id
+    } : null
+
+      const formattedBlogs = flatArr({blogs: blogs})
+    res.json({
+      blogs: formattedBlogs,
+      nextCursor
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json("something went wrong!!");
+  }
+});
+
 blogRouter.use(verifyUser);
 
 //create a blog
@@ -283,70 +344,6 @@ const nextCursor = blogs.length > 0 ? {
     res.status(500).json({
       msg: "something went wrong!!",
     });
-  }
-});
-
-//get blogs (all)
-interface Icursor {
-  createdAt: string;
-  id: string;
-}
-blogRouter.get("/feed", async (req, res) => {
-  try {
-    const { createdAt, id } = req.query;
-
-    const cursorVal = {
-        createdAt,
-        id
-    }
-
-    const blogs = await prisma.blog.findMany({
-      take: 5,
-      skip: createdAt && id ? 1 : 0,
-      cursor: createdAt && id
-        ? {
-            createdAt_id: {
-              createdAt: cursorVal.createdAt as string,
-              id: cursorVal.id as string,
-            },
-          }
-        : undefined,
-      where: {
-        isPublic: true,
-      },
-      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-      include: {
-        author: {
-          select: {
-            username: true,
-          },
-        },
-        tags: {
-          select: {
-            tag: {
-              select: {
-                name: true,
-                id: true
-              }
-            }
-          }
-        }
-      },
-    });
-
-    const nextCursor = blogs.length > 0 ? {
-        createdAt: blogs[blogs.length - 1].createdAt,
-        id: blogs[blogs.length - 1].id
-    } : null
-
-      const formattedBlogs = flatArr({blogs: blogs})
-    res.json({
-      blogs: formattedBlogs,
-      nextCursor
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json("something went wrong!!");
   }
 });
 

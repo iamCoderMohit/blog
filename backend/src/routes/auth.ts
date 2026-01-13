@@ -2,7 +2,7 @@ import express from 'express'
 import prisma from '../config/prisma.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import strict from 'node:assert/strict'
+import { verifyUser } from '../middlewares/verifyUser.js'
 
 const authRouter = express.Router()
 
@@ -32,7 +32,6 @@ authRouter.post('/signup', async (req, res) => {
             }
         })
 
-        //create jwt token and store in cookies then fetch it in the blog route
         const jwttoken = jwt.sign({username: user.username, email: user.email, id: user.id}, process.env.JWT_SECRET!)
 
         res.cookie("token", jwttoken, {
@@ -134,6 +133,36 @@ authRouter.post("/check", async (req, res) => {
 
         res.json({
             msg: "username available!!"
+        })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            msg: "something went wrong!!"
+        })
+    }
+})
+
+authRouter.get("/me", verifyUser, async (req, res) => {
+    try {
+        const user = await prisma.user.findFirst({
+            where: {
+                id: req.user.id
+            },
+            select: {
+                id: true,
+                username: true,
+                email: true
+            }
+        })
+
+        if(!user){
+            return res.status(404).json({
+                msg: "user not found!!"
+            })
+        }
+
+        res.json({
+            user
         })
     } catch (error) {
         console.error(error)
