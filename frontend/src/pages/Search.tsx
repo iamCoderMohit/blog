@@ -25,9 +25,11 @@ function Search() {
         }
     }, [query])
 
+    const [showAuth, setShowAuth] = useState(true)
+
     if(!user){
         return (
-            <AuthComp msg="Sign in to search what you want!!" />
+            <AuthComp msg="Sign in to search what you want!!" setShowAuth={setShowAuth} showAuth={showAuth} />
         )
     }
 

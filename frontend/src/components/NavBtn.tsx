@@ -1,6 +1,7 @@
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
 
 interface Inputs{
     isMobile?: boolean
@@ -25,8 +26,8 @@ function NavBtn({isMobile, setIsMobile}: Inputs) {
   const navigate = useNavigate()
 
   function handleClick(path: string){
-    navigate(`${path}`)
     setIsMobile(false)
+    navigate(`${path}`)
   }
   return (
     <div className={`
@@ -37,25 +38,25 @@ function NavBtn({isMobile, setIsMobile}: Inputs) {
       ? "absolute top-16 left-0 flex-col z-5"
       : "flex-row"}
   `}>
-      <button>
-        <Link to={"/"} onClick={() => handleClick("/")}>Home</Link>
+      <button className="cursor-pointer" onClick={() => handleClick("/")}>
+        Home
       </button>
-      <button>
-        <Link to={"/feed"} onClick={() => handleClick("/feed")}>Feed</Link>
+      <button className="cursor-pointer" onClick={() => handleClick("/feed")}>
+        Feed
       </button>
-      <button>
-        <Link to={"/myblogs"} onClick={() => handleClick("/myblogs")}>Blogs</Link>
+      <button className="cursor-pointer" onClick={() => handleClick("/myblogs")}>
+        Blogs
       </button>
-      <button>
-        <Link to={"/signin"} onClick={() => handleClick("/signin")}>Sign in</Link>
+      <button className="cursor-pointer" onClick={() => handleClick("/signin")}>
+        Sign in
       </button>
-      <button>
-        <Link to={"/signup"} onClick={() => handleClick("/signup")}>Sign up</Link>
+      <button className="cursor-pointer" onClick={() => handleClick("/signup")}>
+        Sign up
       </button>
-      <button>
-        <Link to={"/search"} onClick={() => handleClick("/search")}>Search</Link>
+      <button className="cursor-pointer" onClick={() => handleClick("/search")}>
+        Search
       </button>
-      <button onClick={logout} className="cursor-pointer">
+      <button className="cursor-pointer" onClick={logout}>
         Logout
       </button>
     </div>

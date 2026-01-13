@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import BlogCard from "../components/BlogCard";
 import PopUp from "../components/PopUp";
 import { useBlogs } from "../hooks/useBlog";
@@ -21,9 +21,11 @@ function MyBlogs() {
     fetch();
   }, []);
 
+  const [showAuth, setShowAuth] = useState(true)
+
   if(!user){
     return (
-      <AuthComp msg="Sign in to create your blogs!!" />
+      <AuthComp msg="Sign in to create your blogs!!" setShowAuth={setShowAuth} showAuth={showAuth} />
     )
   }
 

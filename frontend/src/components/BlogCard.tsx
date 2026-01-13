@@ -31,9 +31,7 @@ function BlogCard({
 
   if(showAuth){
     return (
-      // <Overlay>
         <AuthComp msg="Sign in to read this blog!!" setShowAuth={setShowAuth} showAuth={showAuth} />
-      // </Overlay> 
     )
   }
 
