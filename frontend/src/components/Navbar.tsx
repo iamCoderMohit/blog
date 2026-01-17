@@ -6,6 +6,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
 import NavBtn from "./NavBtn";
 import { ImCross } from "react-icons/im";
+import UserBox from "./UserBox";
 
 function Navbar() {
   const { toggleDark, toggleLight, theme } = useTheme();
@@ -24,7 +25,7 @@ function Navbar() {
 
       {isMobile && <NavBtn isMobile={isMobile} setIsMobile={setIsMobile} />}
 
-      <div className="flex gap-8">
+      <div className="flex gap-8 items-center">
         <button onClick={toggleLight} className="text-2xl cursor-pointer">
           {" "}
           {theme === "light" ? <IoSunny /> : <IoSunnyOutline />}
@@ -32,6 +33,10 @@ function Navbar() {
         <button onClick={toggleDark} className="cursor-pointer text-lg">
           {theme === "dark" ? <FaMoon /> : <FaRegMoon />}{" "}
         </button>
+        //fix this when logged in
+        <div className="flex items-center justify-center">
+          <UserBox username="mohit" isTop={true} />
+        </div>
       </div>
 
       <div

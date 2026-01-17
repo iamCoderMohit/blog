@@ -1,6 +1,7 @@
 import express from "express";
 import prisma from "../config/prisma.js";
 import { verifyUser } from "../middlewares/verifyUser.js";
+import { flatArr } from "../helpers/flatArr.js";
 const tagRouter = express.Router();
 tagRouter.use(verifyUser);
 tagRouter.get("/find", async (req, res) => {
@@ -27,11 +28,22 @@ tagRouter.get("/find", async (req, res) => {
                     select: {
                         username: true
                     }
+                },
+                tags: {
+                    select: {
+                        tag: {
+                            select: {
+                                name: true,
+                                id: true
+                            }
+                        }
+                    }
                 }
             }
         });
+        const formattedBlogs = flatArr({ blogs: blogs });
         res.json({
-            blogs,
+            blogs: formattedBlogs,
         });
     }
     catch (error) {

@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Inputs } from "../commonInputs/interface";
 import { hexToRgba } from "../helpers/hextorgb";
 import Tag from "./Tag";
 import { useAuth } from "../context/AuthContext";
 import AuthComp from "./AuthComp";
-import Overlay from "./Overlay";
+import UserBox from "./UserBox";
+import { getRandomColor } from "../helpers/randomColor";
+import { calcDate } from "../helpers/date";
 
 function BlogCard({
   i,
@@ -16,12 +18,7 @@ function BlogCard({
   bgColor: string;
   isEdit?: boolean;
 }) {
-  const date = new Date(i.createdAt);
-  const formatted = date.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
+  const formatted = calcDate(i.createdAt)
 
   const navigate = useNavigate();
 
@@ -34,6 +31,8 @@ function BlogCard({
         <AuthComp msg="Sign in to read this blog!!" setShowAuth={setShowAuth} showAuth={showAuth} />
     )
   }
+
+  const backgroundColor = useMemo(() => getRandomColor(), [])
 
   return (
     <div
@@ -49,15 +48,8 @@ function BlogCard({
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <div className="flex items-center gap-3">
-        <div
-          className="h-5 w-5 flex items-center justify-center rounded-full p-4"
-          style={{ backgroundColor: bgColor }}
-        >
-          {i.author.username[0].toUpperCase()}
-        </div>
-        <h1 className="">{i.author.username}</h1>
-      </div>
+
+      <UserBox username={i.author.username} backgroundColor={backgroundColor} />
 
       <div className="pl-10">
         <h1 className="font-bold text-lg">{i.title}</h1>

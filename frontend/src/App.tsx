@@ -10,6 +10,7 @@ import BlogDetails from "./pages/BlogDetails";
 import EditBlog from "./pages/EditBlog";
 import Tag from "./pages/Tag";
 import Search from "./pages/Search";
+import Profile from "./pages/Profile";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/blog/edit/:id" element={<EditBlog />} />
           <Route path="/tag/:tagname" element={<Tag />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/profile/:username" element={<Profile />} />
         </Route>
       </Routes>
   );

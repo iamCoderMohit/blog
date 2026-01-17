@@ -8,3 +8,11 @@ export interface Inputs {
   bgColor: string;
   id: string
 }
+
+export interface MyInfo {
+  id: string,
+  username: string
+  email: string
+  createdAt: string
+  blogs: []
+}

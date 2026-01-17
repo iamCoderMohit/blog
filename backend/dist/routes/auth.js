@@ -148,5 +148,45 @@ authRouter.get("/me", verifyUser, async (req, res) => {
         });
     }
 });
+//get all details of user for profile page
+authRouter.get("/myinfo", verifyUser, async (req, res) => {
+    try {
+        const { username } = req.query;
+        const info = await prisma.user.findUnique({
+            where: {
+                username: username
+            },
+            omit: {
+                password: true
+            },
+            include: {
+                blogs: {
+                    include: {
+                        author: {
+                            select: {
+                                username: true
+                            }
+                        },
+                        tags: {
+                            select: {
+                                tag: {
+                                    select: {
+                                        name: true,
+                                        id: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        res.json({
+            info
+        });
+    }
+    catch (error) {
+    }
+});
 export default authRouter;
 //# sourceMappingURL=auth.js.map
