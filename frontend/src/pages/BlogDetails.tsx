@@ -8,6 +8,8 @@ import BottomDialog from "../components/BottomDialog";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { useAuth } from "../context/AuthContext";
+import AuthComp from "../components/AuthComp";
 
 function BlogDetails() {
   const blog = useLocation().state;
@@ -49,6 +51,18 @@ function BlogDetails() {
   }
 
   const [isMobile, setIsMobile] = useState(false);
+  const [showAuth, setShowAuth] = useState(true);
+  const {user} = useAuth()
+
+  if(!user){
+    return (
+        <AuthComp
+        msg="sign in to read blog!!"
+        setShowAuth={setShowAuth}
+        showAuth={showAuth}
+      />
+    )
+  }
 
   return (
     <MainTheme>

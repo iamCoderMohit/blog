@@ -39,11 +39,9 @@ function BlogCard({
       className={`cursor-pointer rounded-md p-3`}
       style={{ backgroundColor: hexToRgba(bgColor, hover ? 0.2 : 0.1) }}
       onClick={() => {
-        if(!user){
-          setShowAuth(true)
-        }else{
+
           navigate(`/blog/${i.id}`, { state: { i, bgColor, isEdit } })
-        }
+        
       }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}

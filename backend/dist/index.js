@@ -6,12 +6,12 @@ import cors from 'cors';
 import tagRouter from './routes/tag.js';
 import searchRouter from './routes/search.js';
 const app = express();
-app.use(express.json());
-app.use(cookieParser());
 app.use(cors({
-    origin: ["http://localhost:5173", "http://localhost:4173"],
+    origin: ["https://blog-eosin-gamma.vercel.app", "http://localhost:5173"],
     credentials: true
 }));
+app.use(cookieParser());
+app.use(express.json());
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/blog", blogRouter);
 app.use("/api/v1/tag", tagRouter);
