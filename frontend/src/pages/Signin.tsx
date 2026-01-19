@@ -1,21 +1,28 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import Spinner from "../components/Spinner";
+import { useNavigate } from "react-router-dom";
 
 function Signin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const {refetchUser} = useAuth()
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   async function handleSignin(username: string, password: string) {
     try {
-      axios.post(
+      setLoading(true)
+      await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/auth/signin`,
         { username, password },
         { withCredentials: true }
       );
 
       refetchUser()
+      setLoading(false)
+      navigate("/feed")
     } catch (error) {
       console.log(error);
     }
@@ -38,8 +45,10 @@ function Signin() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button 
-        className="bg-blue-700 p-3 rounded-xl text-white text-lg cursor-pointer"
-        onClick={() => handleSignin(username, password)}>Enter</button>
+        className="bg-blue-700 p-3 rounded-xl text-white text-lg cursor-pointer flex justify-center gap-3 items-center"
+        onClick={() => handleSignin(username, password)}>
+          <h1>Enter</h1> {loading && <Spinner />}
+        </button>
       </div>
     </div>
   );

@@ -7,11 +7,13 @@ import { useState } from "react";
 import NavBtn from "./NavBtn";
 import { ImCross } from "react-icons/im";
 import UserBox from "./UserBox";
+import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
   const { toggleDark, toggleLight, theme } = useTheme();
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
+  const {user} = useAuth()
 
   return (
     <div className="flex justify-around dark:text-white text-black items-center p-5">
@@ -33,10 +35,10 @@ function Navbar() {
         <button onClick={toggleDark} className="cursor-pointer text-lg">
           {theme === "dark" ? <FaMoon /> : <FaRegMoon />}{" "}
         </button>
-        //fix this when logged in
-        <div className="flex items-center justify-center">
-          <UserBox username="mohit" isTop={true} />
-        </div>
+        
+        {user && <div className="flex items-center justify-center">
+          <UserBox username={user.username} isTop={true} />
+        </div>}
       </div>
 
       <div

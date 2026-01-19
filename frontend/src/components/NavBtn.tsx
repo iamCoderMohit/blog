@@ -31,14 +31,14 @@ function NavBtn({ isMobile, setIsMobile }: Inputs) {
       <button className="cursor-pointer" onClick={() => handleClick("/feed")}>
         Feed
       </button>
-      <button
+      {user && <button
         className="cursor-pointer"
         onClick={() => handleClick("/myblogs")}
       >
         Blogs
-      </button>
+      </button>}
       {!user && (
-        <div className="flex gap-10">
+        <div className="flex md:flex-row flex-col gap-10">
           <button
             className="cursor-pointer"
             onClick={() => handleClick("/signin")}
@@ -53,9 +53,9 @@ function NavBtn({ isMobile, setIsMobile }: Inputs) {
           </button>
         </div>
       )}
-      <button className="cursor-pointer" onClick={() => handleClick("/search")}>
+      {user && <button className="cursor-pointer" onClick={() => handleClick("/search")}>
         Search
-      </button>
+      </button>}
     </div>
   );
 }

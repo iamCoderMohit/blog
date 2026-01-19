@@ -2,22 +2,30 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useUsername } from "../hooks/useUsername";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import Spinner from "../components/Spinner";
 
 function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const {refetchUser} = useAuth()
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   async function handleSignup(username: string, password: string, email: string) {
     try {
-      axios.post(
+      setLoading(true)
+      await axios.post(
         `${BACKEND_URL}/auth/signup`,
         { username, password, email },
+        {withCredentials: true}
       );
       refetchUser()
+      setLoading(false)
+      navigate("/feed")
     } catch (error) {
       console.log(error);
     }
@@ -63,10 +71,11 @@ function Signup() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button
-          className="bg-blue-700 p-3 rounded-xl text-white text-lg cursor-pointer"
+          className="bg-blue-700 p-3 rounded-xl text-white text-lg cursor-pointer flex items-center justify-center gap-3"
           onClick={() => handleSignup(username, password, email)}
         >
-          Enter
+          <h1>Enter</h1>
+          {loading && <Spinner />}
         </button>
       </div>
     </div>

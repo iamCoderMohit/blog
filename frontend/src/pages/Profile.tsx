@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import MainTheme from "../layouts/MainTheme";
 import { useUsername } from "../hooks/useUsername";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { LoaderOne } from "../components/Loader";
 import { calcDate } from "../helpers/date";
 import BlogCard from "../components/BlogCard";
@@ -21,6 +21,8 @@ function Profile() {
     fetch();
   }, []);
 
+  const navigate = useNavigate()
+
   async function logout() {
     try {
       await axios.post(
@@ -29,6 +31,7 @@ function Profile() {
         { withCredentials: true }
       );
       refetchUser();
+      navigate("/feed")
     } catch (error) {
       console.error(error);
     }
