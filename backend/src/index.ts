@@ -10,7 +10,7 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: ["https://blog-eosin-gamma.vercel.app"],
+    origin: "https://blog-eosin-gamma.vercel.app",
     credentials: true
 }))
 
